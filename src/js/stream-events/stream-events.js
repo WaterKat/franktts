@@ -1,4 +1,3 @@
-const TTSFilter = require('../text-to-speech/ttsfilter.js');
 const responses = require('../config.js').responses;
 
 class StreamEventInterpreter {
@@ -94,10 +93,7 @@ class StreamEventInterpreter {
         let ttsMessage = ''
 
         if (StreamEventInterpreter[_event.type] !== undefined) {
-            ttsMessage = StreamEventInterpreter[_event.type](_event);
-        
-            const filteredText = TTSFilter.filterALL(ttsMessage, _event.emotes);
-            ttsMessage=filteredText;
+            ttsMessage = StreamEventInterpreter[_event.type](_event);        
         }
         
         return ttsMessage;
