@@ -19,6 +19,15 @@ ttsInstance.addAmplitudeSubscriptor(
 
 streamelementsListener.subscribe( (_key, _event) => {
     const streamEvent = streamelementsTranslator.translate(_key, _event);
+
+    //temp
+    if (streamEvent.type == 'message') {
+        if (streamEvent.message.trim() == '!frank skip'){
+            ttsInstance.requestStop();
+            return;
+        }
+    }
+
     const replyMessage = StreamEventInterpreter.ttsMessageFromEvent(streamEvent);
     const blacklistedEmotes = TTSFilter.emotesToBlackList(streamEvent.emotes);
     const filteredText = TTSFilter.filterALL(replyMessage, blacklistedEmotes);
