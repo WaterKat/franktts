@@ -17,6 +17,7 @@ class BrianTTS {
         this.audio_buffer_source_node = undefined;
         this.latest_max_amplitude = 0;
 
+        this.onAmplitudeUpdate = new Subscription();
         this.onStopRequested = new Subscription();
     }
 
@@ -50,7 +51,8 @@ class BrianTTS {
             this.onStopRequested.subscribe(stop);
 
             const amplitudeInterval = setInterval(() => {
-                this.amplitude_subscriptors.forEach(element => { element(this.getNormalizedCurrentAmplitude()); });
+                this.onAmplitudeUpdate.invoke(this.getNormalizedCurrentAmplitude());
+//                this.amplitude_subscriptors.forEach(element => { element(this.getNormalizedCurrentAmplitude()); });
             } ,1000/this.audio_amplitude_tick);
 
 
@@ -67,7 +69,8 @@ class BrianTTS {
             clearInterval(amplitudeInterval);
 
             this.latest_max_amplitude = 0;
-            this.amplitude_subscriptors.forEach(element => { element( this.latest_max_amplitude ); });
+            this.onAmplitudeUpdate.invoke(this.latest_max_amplitude);
+//            this.amplitude_subscriptors.forEach(element => { element( this.latest_max_amplitude ); });
 
         } catch (error) {
             console.error(error);
@@ -112,11 +115,15 @@ class BrianTTS {
     }
 
     addAmplitudeSubscriptor(_function) {
+        this.onAmplitudeUpdate.subscribe(_function);
+
         if (_function instanceof Function && !this.amplitude_subscriptors.includes(_function, 0)) {
             this.amplitude_subscriptors.push(_function);
         }
     }
     removeAmplitudeSubscriptor(_function) {
+        this.onAmplitudeUpdate.unsubscribe(_function);
+
         if (_function instanceof Function && this.amplitude_subscriptors.includes(_function, 0)) {
             const index = this.amplitude_subscriptors.indexOf(_function);
             if (index > -1) {
