@@ -1,3 +1,5 @@
+const emoteWhitelist = require('../config.js').emoteWhitelist;
+
 class TTSFilter {
     static words = [
         /*
@@ -539,6 +541,18 @@ class TTSFilter {
         return _string.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, _replacement);
     }
 
+    static emotesToBlackList(_emotes) {
+        let blacklist = []
+
+        _emotes.forEach(emote=>{
+            if (!emoteWhitelist.includes(emote.type)){
+                blacklist.push(emote.name);
+            }
+        });
+
+        return blacklist;
+    }
+
     static filterALL(_text, _blacklist = []) {
         let filtered_text = ' ' + _text + ' ';
 
@@ -557,7 +571,7 @@ class TTSFilter {
 
         //caseSensitive
         _blacklist.forEach(_blacklistWord => {
-            filtered_text = TTSFilter.caseSensitive(filtered_text, ' ' + _blacklistWord + ' ', '');
+            filtered_text = TTSFilter.caseSensitive(filtered_text, ' ' + _blacklistWord + ' ', ' ');
         });
 
         filtered_text = filtered_text.replace(' . ', '.');
