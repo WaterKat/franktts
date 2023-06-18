@@ -8,6 +8,10 @@ const usernameBlacklist = [
     'kofistreambot',
 ];
 
+const emoteWhitelist = [
+    '7tv'
+];
+
 const responses = {
     message: [
         "Welcome, ${username}! Enjoy the cosmic vibes!",
@@ -136,4 +140,5 @@ module.exports = {
     usernameBlacklist: usernameBlacklist,
     responses: responses,
     imageSources: imageSources,
+    emoteWhitelist : emoteWhitelist,
 }
