@@ -1,3 +1,5 @@
+const Subscription = require('../subscription-methods/subscription.js');
+
 class BrianTTS {
     time_between_messages = 0.5;
     audio_context = new AudioContext();
@@ -5,7 +7,6 @@ class BrianTTS {
 
     constructor() {
         this.queue = [];
-        this.amplitude_subscriptors = [];
 
         this.IsPlaying = false;
 
@@ -14,10 +15,17 @@ class BrianTTS {
 
         this.audio_buffer_source_node = undefined;
         this.latest_max_amplitude = 0;
+
+        this.onAmplitudeUpdate = new Subscription();
+        this.onStopRequested = new Subscription();
     }
 
     textToURL(_text) {
         return `https://api.streamelements.com/kappa/v2/speech?voice=Brian&text=${encodeURIComponent(_text.trim())}`;
+    }
+
+    stop() {
+        this.onStopRequested.invoke();
     }
 
     async playFromURL(_url) {
@@ -35,13 +43,20 @@ class BrianTTS {
             // Start playing the audio
             this.audio_buffer_source_node.start();
 
+            const stop = () => {
+                this.audio_buffer_source_node.stop();
+            };
+
+            this.onStopRequested.subscribe(stop);
+
             const amplitudeInterval = setInterval(() => {
-                this.amplitude_subscriptors.forEach(element => { element(this.getNormalizedCurrentAmplitude()); });
+                this.onAmplitudeUpdate.invoke(this.getNormalizedCurrentAmplitude());
             } ,1000/this.audio_amplitude_tick);
 
             //wait for end of audio
             await new Promise((resolve) => {
                 this.audio_buffer_source_node.addEventListener('ended', () => {
+                    this.onStopRequested.unsubscribe(stop);
                     resolve();
                 });
             });
@@ -50,7 +65,7 @@ class BrianTTS {
             clearInterval(amplitudeInterval);
 
             this.latest_max_amplitude = 0;
-            this.amplitude_subscriptors.forEach(element => { element( this.latest_max_amplitude ); });
+            this.onAmplitudeUpdate.invoke(this.latest_max_amplitude);
 
         } catch (error) {
             console.error(error);
@@ -95,17 +110,10 @@ class BrianTTS {
     }
 
     addAmplitudeSubscriptor(_function) {
-        if (_function instanceof Function && !this.amplitude_subscriptors.includes(_function, 0)) {
-            this.amplitude_subscriptors.push(_function);
-        }
+        this.onAmplitudeUpdate.subscribe(_function);
     }
     removeAmplitudeSubscriptor(_function) {
-        if (_function instanceof Function && this.amplitude_subscriptors.includes(_function, 0)) {
-            const index = this.amplitude_subscriptors.indexOf(_function);
-            if (index > -1) {
-                this.amplitude_subscriptors.splice(index, 1);
-            }
-        }
+        this.onAmplitudeUpdate.unsubscribe(_function);
     }
 
 }
