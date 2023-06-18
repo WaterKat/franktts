@@ -24,7 +24,7 @@ class BrianTTS {
         return `https://api.streamelements.com/kappa/v2/speech?voice=Brian&text=${encodeURIComponent(_text.trim())}`;
     }
 
-    stop() {
+    requestStop() {
         this.onStopRequested.invoke();
     }
 
