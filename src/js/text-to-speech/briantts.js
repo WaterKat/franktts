@@ -7,7 +7,6 @@ class BrianTTS {
 
     constructor() {
         this.queue = [];
-        this.amplitude_subscriptors = [];
 
         this.IsPlaying = false;
 
@@ -52,10 +51,7 @@ class BrianTTS {
 
             const amplitudeInterval = setInterval(() => {
                 this.onAmplitudeUpdate.invoke(this.getNormalizedCurrentAmplitude());
-//                this.amplitude_subscriptors.forEach(element => { element(this.getNormalizedCurrentAmplitude()); });
             } ,1000/this.audio_amplitude_tick);
-
-
 
             //wait for end of audio
             await new Promise((resolve) => {
@@ -70,7 +66,6 @@ class BrianTTS {
 
             this.latest_max_amplitude = 0;
             this.onAmplitudeUpdate.invoke(this.latest_max_amplitude);
-//            this.amplitude_subscriptors.forEach(element => { element( this.latest_max_amplitude ); });
 
         } catch (error) {
             console.error(error);
@@ -116,20 +111,9 @@ class BrianTTS {
 
     addAmplitudeSubscriptor(_function) {
         this.onAmplitudeUpdate.subscribe(_function);
-
-        if (_function instanceof Function && !this.amplitude_subscriptors.includes(_function, 0)) {
-            this.amplitude_subscriptors.push(_function);
-        }
     }
     removeAmplitudeSubscriptor(_function) {
         this.onAmplitudeUpdate.unsubscribe(_function);
-
-        if (_function instanceof Function && this.amplitude_subscriptors.includes(_function, 0)) {
-            const index = this.amplitude_subscriptors.indexOf(_function);
-            if (index > -1) {
-                this.amplitude_subscriptors.splice(index, 1);
-            }
-        }
     }
 
 }
