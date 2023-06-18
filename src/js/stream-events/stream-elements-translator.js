@@ -52,7 +52,11 @@ function translate(_key, _event) {
         }
 
         _event.data.emotes.forEach(element => {
-            data.emotes.push(element.name);
+            const emote = {
+                type : element.type,
+                name : element.name,
+            }
+            data.emotes.push(emote);
         })
 
     }
