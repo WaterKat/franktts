@@ -38,6 +38,12 @@ class Subscription {
             this.functions.splice(functionIndex, 1);
         }
     }
+
+    invoke(_data){
+        this.functions.forEach(_function => {
+            _function(_data);
+        });
+    }
 }
 
 module.exports = Subscription;
