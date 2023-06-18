@@ -1,3 +1,5 @@
+const Subscription = require('../subscription-methods/subscription.js');
+
 class BrianTTS {
     time_between_messages = 0.5;
     audio_context = new AudioContext();
@@ -14,10 +16,16 @@ class BrianTTS {
 
         this.audio_buffer_source_node = undefined;
         this.latest_max_amplitude = 0;
+
+        this.onStopRequested = new Subscription();
     }
 
     textToURL(_text) {
         return `https://api.streamelements.com/kappa/v2/speech?voice=Brian&text=${encodeURIComponent(_text.trim())}`;
+    }
+
+    stop() {
+        this.onStopRequested.invoke();
     }
 
     async playFromURL(_url) {
@@ -35,13 +43,22 @@ class BrianTTS {
             // Start playing the audio
             this.audio_buffer_source_node.start();
 
+            const stop = () => {
+                this.audio_buffer_source_node.stop();
+            };
+
+            this.onStopRequested.subscribe(stop);
+
             const amplitudeInterval = setInterval(() => {
                 this.amplitude_subscriptors.forEach(element => { element(this.getNormalizedCurrentAmplitude()); });
             } ,1000/this.audio_amplitude_tick);
 
+
+
             //wait for end of audio
             await new Promise((resolve) => {
                 this.audio_buffer_source_node.addEventListener('ended', () => {
+                    this.onStopRequested.unsubscribe(stop);
                     resolve();
                 });
             });
