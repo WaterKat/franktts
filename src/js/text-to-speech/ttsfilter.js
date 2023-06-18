@@ -140,6 +140,10 @@ class TTSFilter {
     static emotesToBlackList(_emotes) {
         let blacklist = []
 
+        if (!_emotes){
+            return [];
+        }
+
         _emotes.forEach(emote=>{
             if (!emoteWhitelist.includes(emote.type)){
                 blacklist.push(emote.name);
