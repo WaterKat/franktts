@@ -1,4 +1,5 @@
 const responses = require('../config.js').responses;
+const usernameBlacklist = require('../config.js').usernameBlacklist;
 
 class StreamEventInterpreter {
     static usernames = [];
