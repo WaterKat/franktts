@@ -43,23 +43,34 @@ class BrianTTS {
             // Start playing the audio
             this.audio_buffer_source_node.start();
 
-            const stop = () => {
-                this.audio_buffer_source_node.stop();
-            };
-
-            this.onStopRequested.subscribe(stop);
-
+            //Update amplitude values
             const amplitudeInterval = setInterval(() => {
                 this.onAmplitudeUpdate.invoke(this.getNormalizedCurrentAmplitude());
             } ,1000/this.audio_amplitude_tick);
 
-            //wait for end of audio
-            await new Promise((resolve) => {
-                this.audio_buffer_source_node.addEventListener('ended', () => {
-                    this.onStopRequested.unsubscribe(stop);
+            //wait until stopped or until audio ends
+            const audioStopPromise = new Promise((resolve) => {
+                const stop = () => {
+                    this.audio_buffer_source_node.stop();
+                }
+
+                this.onStopRequested.subscribe(stop);
+
+                const onStopCleanup = () => {
+                    this.onStopRequested.unsubscribe(stop)
                     resolve();
+                }
+
+                this.audio_buffer_source_node.addEventListener('ended', () => {
+                    onStopCleanup();
                 });
+                this.onStopRequested.subscribe(()=>{
+                    onStopCleanup();
+                })
             });
+
+            //wait for end of audio
+            await  audioStopPromise;
 
             //finish up 
             clearInterval(amplitudeInterval);
