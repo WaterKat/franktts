@@ -20,7 +20,8 @@ ttsInstance.addAmplitudeSubscriptor(
 streamelementsListener.subscribe( (_key, _event) => {
     const streamEvent = streamelementsTranslator.translate(_key, _event);
     const replyMessage = StreamEventInterpreter.ttsMessageFromEvent(streamEvent);
-    const filteredText = TTSFilter.filterALL(replyMessage, streamEvent.emotes);
+    const blacklistedEmotes = TTSFilter.emotesToBlackList(streamEvent.emotes);
+    const filteredText = TTSFilter.filterALL(replyMessage, blacklistedEmotes);
     ttsInstance.enqueueRequest(filteredText);
 });
 
