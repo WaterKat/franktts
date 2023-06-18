@@ -11,7 +11,7 @@ function translate(_key, _event) {
     if (data.type == 'subscriber') {
         if (_event.bulkGifted || _event.isCommunityGift) {
             data.type = 'sub_bomb';
-        } else if (event.gifted) {
+        } else if (_event.gifted) {
             data.type = 'sub_gift';
         } else {
             data.type = 'sub';
