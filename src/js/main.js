@@ -3,7 +3,7 @@ const config = require("./config.js");
 const Character = require("./rendering/character.js");
 const BrianTTS = require("./text-to-speech/briantts.js");
 const TTSFilter = require("./text-to-speech/ttsfilter.js");
-const streamelementsListener = require("./stream-events/stream-elements-listener.js"); 
+const streamelementsListener = require("./stream-events/stream-elements-listener.js");
 const streamelementsTranslator = require("./stream-events/stream-elements-translator.js");
 const StreamEventInterpreter = require("./stream-events/stream-events.js");
 
@@ -17,15 +17,20 @@ ttsInstance.addAmplitudeSubscriptor(
     }
 );
 
-streamelementsListener.subscribe( (_key, _event) => {
+streamelementsListener.subscribe((_key, _event) => {
     const streamEvent = streamelementsTranslator.translate(_key, _event);
 
     //temp
     if (streamEvent.type == 'message') {
-        if (streamEvent.message.trim() == '!frank skip'){
+        const trimmedMessage = streamEvent.message.trim();
+        if (trimmedMessage.startsWith('!frank skip')) {
             ttsInstance.requestStop();
             return;
+        } else {
+            console.log('message but not command?', `[${trimmedMessage}]`, streamEvent);
         }
+    } else {
+        console.log('testing commands: ', streamEvent)
     }
 
     const replyMessage = StreamEventInterpreter.ttsMessageFromEvent(streamEvent);
