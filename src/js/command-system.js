@@ -40,7 +40,7 @@ class CommandSystem {
 
         inputText = inputText.substring(response.matchingCommand.length);
 
-        response.args = inputText;
+        response.args = inputText.trim();
 
         return response;
     }
