@@ -1,4 +1,5 @@
 const responses = require('../config.js').responses;
+const usernameBlacklist = require('../config.js').usernameBlacklist;
 
 class StreamEventInterpreter {
     static usernames = [];
@@ -36,7 +37,8 @@ class StreamEventInterpreter {
                 .replace("${sender}", _event.sender)
                 + " " + _event.message;
         } else {
-            //return `${_event.username} got a sub from ${_event.sender}`;
+            //Uncomment this code only if you want every user to be notified if they received a gift
+            //return `${_event.username} got a sub from ${_event.sender}`; 
             return '';
         }
     }
