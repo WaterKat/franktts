@@ -9,23 +9,27 @@ class CommandSystem {
         'unmute',
     ];
 
-    static parse(text) {
-        let _text = String(text);
-
+    static parse(_text) {
         const response = {
             isCommand: false,
             matchingCommand: '',
             args : '',
         }
 
-        if (!_text.startsWith(CommandSystem.commandIdentifier)) {
+        if (!_text){
             return response;
         }
 
-        _text = _text.substring(CommandSystem.commandIdentifier.length)
+        let inputText = String(_text);
+
+        if (!inputText.startsWith(CommandSystem.commandIdentifier)) {
+            return response;
+        }
+
+        inputText = inputText.substring(CommandSystem.commandIdentifier.length)
 
         CommandSystem.commandList.every((command) => {
-            if (_text.startsWith(command)) {
+            if (inputText.startsWith(command)) {
                 isCommand = true;
                 response.matchingCommand = command;
                 return false;
@@ -34,9 +38,9 @@ class CommandSystem {
             return true;
         });
 
-        _text = _text.substring(response.matchingCommand.length);
+        inputText = inputText.substring(response.matchingCommand.length);
 
-        response.args = _text;
+        response.args = inputText;
 
         return response;
     }
