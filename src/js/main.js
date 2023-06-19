@@ -20,7 +20,7 @@ ttsInstance.addAmplitudeSubscriptor(
 streamelementsListener.subscribe((_key, _event) => {
     const streamEvent = streamelementsTranslator.translate(_key, _event);
 
-    //temp
+    //Temporary, Replace with command management system
     if (streamEvent.type == 'message') {
         const trimmedMessage = streamEvent.message.trim();
         if (trimmedMessage.startsWith('!frank skip')) {
@@ -36,7 +36,9 @@ streamelementsListener.subscribe((_key, _event) => {
     const replyMessage = StreamEventInterpreter.ttsMessageFromEvent(streamEvent);
     const blacklistedEmotes = TTSFilter.emotesToBlackList(streamEvent.emotes);
     const filteredText = TTSFilter.filterALL(replyMessage, blacklistedEmotes);
+
     ttsInstance.enqueueRequest(filteredText);
+
 });
 
 ttsInstance.enqueueRequest("What's up star beans. My name is Frank.");
