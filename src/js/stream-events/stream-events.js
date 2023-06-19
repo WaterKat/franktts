@@ -83,12 +83,7 @@ class StreamEventInterpreter {
     }
 
     static message(_event) {
-        const say_command="!frank say "
-        if (_event.message.startsWith(say_command) && _event.mod == true){
-            return _event.message.slice(say_command.length);
-        }else{
-            return StreamEventInterpreter.first_message(_event)
-        }
+        return StreamEventInterpreter.first_message(_event);
     }
 
     static ttsMessageFromEvent(_event) {
