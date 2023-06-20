@@ -2,11 +2,11 @@ const subscribers = [];
 
 function callSubscribers(_listener, _event) {
     subscribers.forEach(subscriber => {
-        try{
+ //       try{
             subscriber(_listener, _event);
-        }catch(e){
-            console.error(e);
-        }
+//        }catch(e){
+//            console.error(e);
+//        }
     });
 }
 
