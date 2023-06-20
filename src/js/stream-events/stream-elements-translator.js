@@ -35,94 +35,183 @@ class StreamEventProcessor {
         }
     }
 
+    static #updatePermissions(_data, _permissions) {
+        if (!_data || !_data.event || !_data.event.channel || !_data.event.data || !_data.event.data.tags)
+            return;
+        if (_data.event.data.nick == _data.event.data.channel && !_permissions.streamer.includes(_data.event.data.nick)) {
+            _permissions.streamer.push(_data.event.data.nick);
+            return;
+        }
+        if (_data.event.data.tags.mod === '1' || !_permissions.moderator.includes(_data.event.data.nick)) {
+            _permissions.moderator.push(_data.event.data.nick);
+            return;
+        }
+        if (_data.event.data.tags.vip === '1' || !_permissions.vip.includes(_data.event.data.nick)) {
+            _permissions.vip.push(_data.event.data.nick);
+            return;
+        }
+        if (_data.event.data.tags.subscriber === '1' || !_permissions.subscriber.includes(_data.event.data.nick)) {
+            _permissions.subscriber.push(_data.event.data.nick);
+            return;
+        }
+    };
+
+    static #getUsername(_data) {
+        let response = '';
+
+        if (!_data || !_data.event || !_data.event.name)
+            return response;
+        response = _data.event.name.toLowerCase()
+
+        if (!_data.event.data) {
+            return response;
+        }
+        if (!_data.event.data.nick) {
+            return response;
+        }
+
+        return _data.event.data.nick.toLowerCase();
+    }
+
+    static #getPermissions(_username, _permissions) {
+        const defaultResponse = 'chatter';
+
+        const permissionTypes = Object.keys(_permissions);
+        permissionTypes.forEach((permissionType) => {
+            if (_permissions[permissionType].includes(_username)) {
+                return permissionType;
+            }
+        });
+
+        return defaultResponse;
+    }
+
+    static #getType(_data) {
+        let response = '';
+        if (!_data || !_data.key)
+            return response;
+
+        if (_data.key !== 'subscriber')
+            return _data.key;
+
+        if (!_data.event)
+            return response;
+
+        if (_data.event.bulkGifted || _data.event.isCommunityGift) {
+            return 'gift-single';
+        } else if (_data.event.gifted) {
+            return 'gift-bomb';
+        } else {
+            return 'sub';
+        }
+    }
+
+    static #getMessage(_data){
+        let response = '';
+
+        if (!_data || !_data.event)
+            return response;
+
+        response = _data.event.message || response;
+
+        if (_data.event.data && _data.event.data.text)
+            response = _data.event.data.text;
+
+        return response;
+    }
+
+    static #getEmotes(_data){
+        let response = [];
+
+        if (!_data || !_data.event || !_data.event.data || !_data.event.data.emotes)
+            return response;
+
+        _data.event.data.emotes.forEach(emote => {
+            response.push({type: emote.type, name: emote.name});
+        });
+
+        return response;
+    }
+
+    static #getSub(_data){
+        const response = {
+            length: 0,
+        };
+
+        if (!_data || !_data.event || !_data.event.amount)
+            return response;
+
+        response.length = _data.event.amount;
+
+        return response;
+    }
+
+    static #getGift(_data){
+        const response = {
+            sender: '',
+            count: 1,
+            isInitial: false,
+            isGifted: true,
+            isBulk: false,
+        };
+
+        if (!_data || !_data.event || !_data.event.sender)
+            return response;
+        
+        response.sender = _data.event.sender;
+        response.count = _data.event.amount || 1;
+        response.isInitial = _data.event.bulkGifted || false;
+        response.isGifted = _data.event.gifted || false;
+        response.isBulk = _data.event.isCommunityGift || false;
+
+        return response;
+    }
+
     static ProcessStreamElementEvent(_data) {
         const streamEvent = Object.create(StreamEventProcessor.#stream_event);
         //const streamEvent = StreamEventProcessor.#stream_event;
         //temp
         const permissions = {
-            streamer : [],
-            moderator : [],
-            vip : [],
-            subscriber : [],
+            streamer: [],
+            moderator: [],
+            vip: [],
+            subscriber: [],
         };
 
-        //temp
-        const updatePermissions = () => {
-            if (!_data || !_data.event || !_data.event.channel || !_data.event.data || !_data.event.data.tags)
-                return;
-            if (_data.event.data.nick == _data.event.data.channel && !permissions.streamer.includes(_data.event.data.nick)){
-                permissions.streamer.push(_data.event.data.nick);
-                return;
-            }
-            if (_data.event.data.tags.mod === '1' || !permissions.moderator.includes(_data.event.data.nick)){
-                permissions.moderator.push(_data.event.data.nick);
-                return;
-            }
-            if (_data.event.data.tags.vip === '1' || !permissions.vip.includes(_data.event.data.nick)){
-                permissions.vip.push(_data.event.data.nick);
-                return;
-            }
-            if (_data.event.data.tags.subscriber === '1' || !permissions.subscriber.includes(_data.event.data.nick)){
-                permissions.subscriber.push(_data.event.data.nick);
-                return;
-            }
-        };
-        updatePermissions();
+        //SHOULD BE MOVED OUTSIDE
+        StreamEventProcessor.#updatePermissions(_data, permissions);
 
         //username
-        const getUsername = () => {
-            let response = '';
-            
-            if (!_data || !_data.event || !_data.event.name)
-                return response;
-            response = _data.event.name.toLowerCase()
-
-            if (!_data.event.data){
-                return response;
-            }
-            if (!_data.event.data.nick){
-                return response;
-            }
-            return _data.event.data.nick.toLowerCase();
-        }
-        streamEvent.username = getUsername();
+        streamEvent.username = StreamEventProcessor.#getUsername(_data);
 
         //permissions
-        const getPermissions = () => {
-            const defaultResponse = 'chatter';
-
-            const permissionTypes = Object.keys(permissions);
-            permissionTypes.forEach((permissionType) => {
-                if (permissions[permissionType].includes(streamEvent.username)){
-                    return permissionType;
-                }
-            });
-
-            return defaultResponse;
-        }
-        streamEvent.permissions = getPermissions();
+        streamEvent.permissions = StreamEventProcessor.#getPermissions(streamEvent.username, permissions);
 
         //type
-        if (_data.key !== 'subscriber') {
-            streamEvent.type = _data.key;
-        } else {
-            if (_data.event.bulkGifted || _data.event.isCommunityGift) {
-                streamEvent.type = 'gift-single';
-            } else if (_data.event.gifted) {
-                streamEvent.type = 'gift-bomb';
-            } else {
-                streamEvent.type = 'sub';
-            }
-        }
+        streamEvent.type = StreamEventProcessor.#getType(_data);
+
+        //message
+        streamEvent.message = StreamEventProcessor.#getMessage(_data);
+
+        //emotes
+        streamEvent.emote = StreamEventProcessor.#getEmotes(_data);
+
+        //follow
+
+        //sub
+        streamEvent.sub = StreamEventProcessor.#getSub(_data);
+
+        //gift
+        streamEvent.gift = StreamEventProcessor.#getGift(_data);
 
         return streamEvent;
     }
 }
 
 function translate(_key, _event) {
-    const processedEvent = StreamEventProcessor.ProcessStreamElementEvent({key: _key, event: _event});
+    const processedEvent = StreamEventProcessor.ProcessStreamElementEvent({ key: _key, event: _event });
     console.log('Processed Event: ', processedEvent);
-//    console.log(`translate SE_Event: ${_key} `, _event);
+    console.log(`Raw SE_Event: ${_key} `, _event);
 
     let data = {
         type: _key,
