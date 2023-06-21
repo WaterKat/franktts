@@ -18,6 +18,7 @@ class BrianTTS {
 
         this.onAmplitudeUpdate = new Subscription();
         this.onStopRequested = new Subscription();
+        this.isSuspended = true;
     }
 
     textToURL(_text) {
@@ -29,6 +30,8 @@ class BrianTTS {
     }
 
     async playFromURL(_url) {
+
+
         try {
             // Load audio file from a URL
             const response = await fetch(_url);
@@ -43,10 +46,21 @@ class BrianTTS {
             // Start playing the audio
             this.audio_buffer_source_node.start();
 
+            while (this.isSuspended) {
+                this.audio_context.resume();
+
+                if (this.audio_context.state === 'suspended') {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    console.log('Page not interacted yet');
+                }else {
+                    this.isSuspended = false;
+                }
+            }
+
             //Update amplitude values
             const amplitudeInterval = setInterval(() => {
                 this.onAmplitudeUpdate.invoke(this.getNormalizedCurrentAmplitude());
-            } ,1000/this.audio_amplitude_tick);
+            }, 1000 / this.audio_amplitude_tick);
 
             //wait until stopped or until audio ends
             const audioStopPromise = new Promise((resolve) => {
@@ -64,13 +78,13 @@ class BrianTTS {
                 this.audio_buffer_source_node.addEventListener('ended', () => {
                     onStopCleanup();
                 });
-                this.onStopRequested.subscribe(()=>{
+                this.onStopRequested.subscribe(() => {
                     onStopCleanup();
                 })
             });
 
             //wait for end of audio
-            await  audioStopPromise;
+            await audioStopPromise;
 
             //finish up 
             clearInterval(amplitudeInterval);
@@ -112,7 +126,7 @@ class BrianTTS {
     enqueueRequest(_text) {
         if (_text.trim() == '')
             return;
-            
+
         this.queue.push(async () => {
             await this.playFromURL(this.textToURL(_text));
         })
