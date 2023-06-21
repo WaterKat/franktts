@@ -178,8 +178,6 @@ class TTSFilter {
         filtered_text = filtered_text.replace('  ', ' ').replace('  ', ' ');
         filtered_text = filtered_text.trim();
 
-        console.log("Filtered Text: ", filtered_text);
-
         return filtered_text
     }
 }
