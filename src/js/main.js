@@ -20,7 +20,7 @@ ttsInstance.addAmplitudeSubscriptor(
 );
 
 StreamElementsEventsSubscription.subscribe((_data) => {
-    const oldStreamEvent = StreamEventProcessor.translate(_data);
+//    const oldStreamEvent = StreamEventProcessor.translate(_data);
     const streamEvent = StreamEventProcessor.ProcessStreamElementEvent(_data);
 
     let reply = '';

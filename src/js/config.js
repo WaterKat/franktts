@@ -11,7 +11,7 @@ const usernameBlacklist = [
 const emoteWhitelist = [
     '7tv'
 ];
-
+/*
 const responses = {
     message: [
         "Welcome, ${username}! Enjoy the cosmic vibes!",
@@ -101,6 +101,7 @@ const responses = {
         "Attention star beans! ${username} and ${amount} raiders are incoming!",
     ],
 };
+*/
 
 const imageSources = [
     "https://resources.aonyxlimited.com/frank/0.png",
@@ -118,7 +119,7 @@ const imageSources = [
 
 module.exports = {
     usernameBlacklist: usernameBlacklist,
-    responses: responses,
+//    responses: responses,
     imageSources: imageSources,
     emoteWhitelist : emoteWhitelist,
 }

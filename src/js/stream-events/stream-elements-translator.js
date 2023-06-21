@@ -320,7 +320,7 @@ class StreamEventProcessor {
 
         return streamEvent;
     };
-
+/*
     static translate(_data) {
         const _key = _data.key;
         const _event = _data.event;
@@ -391,6 +391,7 @@ class StreamEventProcessor {
     
         return data;
     }
+    */
 }
 
 
