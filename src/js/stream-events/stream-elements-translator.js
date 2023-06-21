@@ -317,7 +317,10 @@ class StreamEventProcessor {
     }
 }
 
-function translate(_key, _event) {
+function translate(_data) {
+    const _key = _data.key;
+    const _event = _data.event;
+    
     const processedEvent = StreamEventProcessor.ProcessStreamElementEvent({ key: _key, event: _event });
     console.log('Processed Event: ', processedEvent);
     console.log(`Raw SE_Event: ${_key} `, _event);

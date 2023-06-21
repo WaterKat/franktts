@@ -20,7 +20,7 @@ window.addEventListener('onEventReceived', function (obj) {
     const listener = obj.detail.listener.split("-")[0];
     const event = obj.detail.event;
 
-    callSubscribers( listener, event );
+    callSubscribers( { key: listener, event: event });
 });
 
 function subscribe(_function) {
