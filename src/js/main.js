@@ -4,7 +4,7 @@ const Character = require("./rendering/character.js");
 const BrianTTS = require("./text-to-speech/briantts.js");
 const TTSFilter = require("./text-to-speech/ttsfilter.js");
 const streamelementsListener = require("./stream-events/stream-elements-listener.js");
-const streamelementsTranslator = require("./stream-events/stream-elements-translator.js");
+const StreamEventProcessor = require("./stream-events/stream-elements-translator.js");
 const StreamEventInterpreter = require("./stream-events/stream-events.js");
 const CommandSystem = require("./command-system.js");
 const characterCanvas = document.getElementById('canvas1');
@@ -17,8 +17,8 @@ ttsInstance.addAmplitudeSubscriptor(
     }
 );
 
-streamelementsListener.subscribe((_key, _event) => {
-    const streamEvent = streamelementsTranslator.translate(_key, _event);
+streamelementsListener.subscribe((_data) => {
+    const streamEvent = StreamEventProcessor.translate(_data);
 
     //Temporary, Replace with command management system
     if (streamEvent.type == 'message') {
