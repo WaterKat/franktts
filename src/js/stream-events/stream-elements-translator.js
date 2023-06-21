@@ -102,10 +102,12 @@ class StreamEventProcessor {
         if (!_data.event)
             return response;
 
-        if (_data.event.bulkGifted || _data.event.isCommunityGift) {
-            return 'gift-single';
+        if (_data.event.bulkGifted){
+            return 'gift-bomb-sender';
+        }else if (_data.event.isCommunityGift) {
+            return 'gift-bomb-receiver';
         } else if (_data.event.gifted) {
-            return 'gift-bomb';
+            return 'gift-single';
         } else {
             return 'sub';
         }
@@ -168,6 +170,10 @@ class StreamEventProcessor {
         response.isInitial = _data.event.bulkGifted || response.isInitial;
         response.isGifted = _data.event.gifted || response.isGifted;
         response.isBulk = _data.event.isCommunityGift || response.isBulk;
+
+        if (response.isInitial){
+            response.isBulk = true;
+        }
 
         return response;
     }
@@ -272,7 +278,6 @@ class StreamEventProcessor {
 
         //SHOULD BE MOVED OUTSIDE
         StreamEventProcessor.#updatePermissions(_data, permissions);
-        console.log(permissions);
 
         //username
         streamEvent.username = StreamEventProcessor.#getUsername(_data);
@@ -321,8 +326,11 @@ class StreamEventProcessor {
         const _event = _data.event;
     
         const processedEvent = StreamEventProcessor.ProcessStreamElementEvent({ key: _key, event: _event });
-        console.log('Processed Event: ', processedEvent);
-        console.log(`Raw SE_Event: ${_key} `, _event);
+
+        if (!_key.startsWith('event')){
+            console.log('Processed Event: ', processedEvent);
+            console.log(`Raw SE_Event: ${_key} `, _event);
+        }
     
         let data = {
             type: _key,
