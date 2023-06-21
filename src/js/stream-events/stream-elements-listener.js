@@ -2,11 +2,7 @@ const subscribers = [];
 
 function callSubscribers(_listener, _event) {
     subscribers.forEach(subscriber => {
- //       try{
-            subscriber(_listener, _event);
-//        }catch(e){
-//            console.error(e);
-//        }
+        subscriber(_listener, _event);
     });
 }
 
@@ -20,7 +16,7 @@ window.addEventListener('onEventReceived', function (obj) {
     const listener = obj.detail.listener.split("-")[0];
     const event = obj.detail.event;
 
-    callSubscribers( { key: listener, event: event });
+    callSubscribers({ key: listener, event: event });
 });
 
 function subscribe(_function) {
@@ -60,6 +56,6 @@ function unsubscribe(_function) {
 }
 
 module.exports = {
-    subscribe : subscribe,
-    unsubscribe : unsubscribe,
+    subscribe: subscribe,
+    unsubscribe: unsubscribe,
 }
