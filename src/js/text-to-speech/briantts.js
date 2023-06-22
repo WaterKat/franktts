@@ -8,7 +8,9 @@ class BrianTTS {
     constructor() {
         this.queue = [];
 
-        this.IsPlaying = false;
+        this.isSuspended = true;
+        this.isPlaying = false;
+        this.isPaused = false;
 
         this.analyzer_node = this.audio_context.createAnalyser();
         this.analyzer_node.connect(this.audio_context.destination);
@@ -18,15 +20,27 @@ class BrianTTS {
 
         this.onAmplitudeUpdate = new Subscription();
         this.onStopRequested = new Subscription();
-        this.isSuspended = true;
     }
 
     textToURL(_text) {
         return `https://api.streamelements.com/kappa/v2/speech?voice=Brian&text=${encodeURIComponent(_text.trim())}`;
     }
 
-    requestStop() {
-        this.onStopRequested.invoke();
+    requestStop(_requestedPops) {
+
+        let successfulPops = 0;
+
+        if (this.isPlaying && _requestedPops > 0) {
+            successfulPops += 1;
+            this.onStopRequested.invoke();
+        }
+
+        while (this.queue.length > 0 && successfulPops < _requestedPops) {
+            successfulPops += 1;
+            this.queue.shift();
+        }
+
+        return successfulPops;
     }
 
     async playFromURL(_url) {
@@ -52,7 +66,7 @@ class BrianTTS {
                 if (this.audio_context.state === 'suspended') {
                     await new Promise(resolve => setTimeout(resolve, 1000));
                     console.log('Page not interacted yet');
-                }else {
+                } else {
                     this.isSuspended = false;
                 }
             }
@@ -112,7 +126,7 @@ class BrianTTS {
     }
 
     async playQueue() {
-        this.IsPlaying = true;
+        this.isPlaying = true;
 
         while (this.queue.length > 0) {
             await this.queue[0]();
@@ -120,7 +134,7 @@ class BrianTTS {
             await new Promise((resolve) => setTimeout(resolve, 1000 * this.time_between_messages));
         }
 
-        this.IsPlaying = false;
+        this.isPlaying = false;
     }
 
     enqueueRequest(_text) {
@@ -130,7 +144,7 @@ class BrianTTS {
         this.queue.push(async () => {
             await this.playFromURL(this.textToURL(_text));
         })
-        if (!this.IsPlaying)
+        if (!this.isPlaying)
             this.playQueue();
     }
 

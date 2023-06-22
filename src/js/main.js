@@ -10,7 +10,11 @@ const CommandSystem = require("./command-system.js");
 const characterCanvas = document.getElementById('canvas1');
 const characterInstance = new Character(characterCanvas);
 
-const usernames = [];
+const runtimeData = {
+    skips: 0,
+    isMuted: false,
+    usernames: [],
+}
 
 const ttsInstance = new BrianTTS();
 ttsInstance.addAmplitudeSubscriptor(
@@ -22,18 +26,60 @@ ttsInstance.addAmplitudeSubscriptor(
 StreamElementsEventsSubscription.subscribe((_data) => {
     const streamEvent = StreamEventProcessor.ProcessStreamElementEvent(_data);
 
+    //console.log(streamEvent);
+
+    //ignore simulated events
+    if (streamEvent.type.startsWith('event'))
+        return;
+
     let reply = '';
 
     if (streamEvent.type === 'command' && streamEvent.command.identifier === '!' && streamEvent.command.group === 'frank') {
         switch (streamEvent.command.request) {
             case 'skip':
-                ttsInstance.requestStop();
-                return;
-            //break;
+                if (!isNaN(streamEvent.command.args) && !isNaN(parseFloat(streamEvent.command.args)) && +streamEvent.command.args > 0) {
+                    console.log('FrankTTS: Requesting skips (', +streamEvent.command.args, ')');
+                    runtimeData.skips += +streamEvent.command.args;
+                } else if (streamEvent.command.args.trim().toLowerCase().startsWith('clear')) {
+                    console.log('FrankTTS: Requesting skip reset');
+                    runtimeData.skips = 0;
+                } else {
+                    console.log('FrankTTS: Requesting skip ( 1 )');
+                    runtimeData.skips += 1;
+                }
+                let itemsSkipped = ttsInstance.requestStop(runtimeData.skips);
+                runtimeData.skips -= itemsSkipped;
+                console.log("TTS Skipped in queue: ", itemsSkipped);
+                //return;
+                break;
+            case 'mute':
+                console.log('FrankTTS: Muted');
+                runtimeData.isMuted = true;
+                ttsInstance.requestStop(1000);
+                break;
+            case 'unmute':
+                console.log('FrankTTS: Unnmuted');
+                runtimeData.isMuted = false;
+                break;
             case 'say':
                 reply = reply || streamEvent.command.args;
                 break;
         }
+    }
+
+    if (streamEvent.type !== 'command' && runtimeData.isMuted) {
+        console.log("FrankTTS: Event received but is currently muted");
+        return;
+    }
+
+    //Command Logic
+
+
+    if (streamEvent.type !== 'command' && runtimeData.skips > 0) {
+        //By returning this event does not get processed.
+        runtimeData.skips -= 1;
+        console.log("FrankTTS: Skips: ", runtimeData.skips);
+        return;
     }
 
     const conditionalMessage = (_data, _usernames) => {
@@ -58,7 +104,7 @@ StreamElementsEventsSubscription.subscribe((_data) => {
         return '';
     };
 
-    reply = reply || conditionalMessage(streamEvent, usernames);
+    reply = reply || conditionalMessage(streamEvent, runtimeData.usernames);
 
     //Testing
     reply = reply || StreamEventInterpreter.responseToEvent(streamEvent);
