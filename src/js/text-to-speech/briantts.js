@@ -8,7 +8,7 @@ class BrianTTS {
     constructor() {
         this.queue = [];
 
-        this.isSuspended = true;
+        this.isSuspended = false;
         this.isPlaying = false;
         this.isPaused = false;
 
