@@ -26,6 +26,13 @@ ttsInstance.addAmplitudeSubscriptor(
 StreamElementsEventsSubscription.subscribe((_data) => {
     const streamEvent = StreamEventProcessor.ProcessStreamElementEvent(_data);
 
+    console.log(streamEvent);
+
+    //Blacklist check
+    if (config.usernameBlacklist.includes(streamEvent.username)){
+        return;
+    }
+
     //console.log(streamEvent);
 
     //ignore simulated events
@@ -34,7 +41,9 @@ StreamElementsEventsSubscription.subscribe((_data) => {
 
     let reply = '';
 
-    if (streamEvent.type === 'command' && streamEvent.command.identifier === '!' && streamEvent.command.group === 'frank') {
+    const isMod = streamEvent.permissions.includes('streamer') || streamEvent.permissions.includes('moderator');
+
+    if (isMod && streamEvent.type === 'command' && streamEvent.command.identifier === '!' && streamEvent.command.group === 'frank') {
         switch (streamEvent.command.request) {
             case 'skip':
                 if (!isNaN(streamEvent.command.args) && !isNaN(parseFloat(streamEvent.command.args)) && +streamEvent.command.args > 0) {
@@ -63,6 +72,7 @@ StreamElementsEventsSubscription.subscribe((_data) => {
                 runtimeData.isMuted = false;
                 break;
             case 'say':
+                console.log(`FrankTTS: ${streamEvent.username} requested a message: `, streamEvent.command.args);
                 reply = reply || streamEvent.command.args;
                 break;
         }
