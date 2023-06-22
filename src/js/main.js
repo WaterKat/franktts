@@ -111,7 +111,7 @@ StreamElementsEventsSubscription.subscribe((_data) => {
         if (!_usernames.includes(_data.username)) {
             _usernames.push(_data.username);
 
-            return messages[Math.floor(Math.random() * messages.length)].replace('${username}', _data.username.replace('_', ' ').trim());
+            return messages[Math.floor(Math.random() * messages.length)].replace('${username}', _data.username.replace('w01f_k', ' wolf ').replace('_', ' ').trim());
         }
 
         return '';
