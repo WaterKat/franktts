@@ -61,6 +61,7 @@ const responses = {
         "Hold on tight! Prepare for a star bean supernova! Enormous thanks to ${gift.sender} for gifting ${gift.count} subscriptions!",
         "Honored to have you as part of our supernova-powered community, ${gift.sender}! Welcome ${gift.count} new star beans to an intergalactic thrill ride!",
     ],
+    /*
     'gift-bomb-receiver': [
         '',
     ],
@@ -71,6 +72,7 @@ const responses = {
         "Thanks, ${username}, for ${cheer.amount} bits! Your cosmic contribution shines bright.",
         "Grateful for ${cheer.amount} bits, ${username}! Your support propels our cosmic adventure!",
     ],
+    */
     raid: [
         "Meteor shower alert! ${username} is bringing ${raid.count} raiders for a cosmic adventure!",
         "Incoming meteor shower! Thanks ${username} for bringing ${raid.count} raiders!",
