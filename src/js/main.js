@@ -26,18 +26,20 @@ ttsInstance.addAmplitudeSubscriptor(
 StreamElementsEventsSubscription.subscribe((_data) => {
     const streamEvent = StreamEventProcessor.ProcessStreamElementEvent(_data);
 
+    //ignore simulated events
+    if (streamEvent.type.startsWith('event')) {
+        return;
+    }
+
     console.log(streamEvent);
 
     //Blacklist check
-    if (config.usernameBlacklist.includes(streamEvent.username)){
+    if (config.usernameBlacklist.includes(streamEvent.username)) {
+        console.log(`FrankTTS: Event from blacklisted username : ${streamEvent.username}`);
         return;
     }
 
     //console.log(streamEvent);
-
-    //ignore simulated events
-    if (streamEvent.type.startsWith('event'))
-        return;
 
     let reply = '';
 
@@ -109,7 +111,7 @@ StreamElementsEventsSubscription.subscribe((_data) => {
         if (!_usernames.includes(_data.username)) {
             _usernames.push(_data.username);
 
-            return messages[Math.floor(Math.random() * messages.length)].replace('${username}', _data.username);
+            return messages[Math.floor(Math.random() * messages.length)].replace('${username}', _data.username.replace('_', ' ').trim());
         }
 
         return '';
