@@ -44,8 +44,6 @@ class BrianTTS {
     }
 
     async playFromURL(_url) {
-
-
         try {
             // Load audio file from a URL
             const response = await fetch(_url);
@@ -60,7 +58,8 @@ class BrianTTS {
             // Start playing the audio
             this.audio_buffer_source_node.start();
 
-            while (this.isSuspended) {
+            while (this.audio_context.state === 'suspended') {
+                this.isSuspended = true;
                 this.audio_context.resume();
 
                 if (this.audio_context.state === 'suspended') {
