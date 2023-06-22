@@ -259,7 +259,7 @@ class StreamEventProcessor {
         if (argsIndex >= rawMessage.length)
             return response;
 
-        const restOfMessage = rawMessage.substring(argsIndex);
+        const restOfMessage = rawMessage.substring(argsIndex).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '');
         response.args = restOfMessage || response.args;
 
         return response;
