@@ -50,6 +50,7 @@ StreamElementsEventsSubscription.subscribe((_data) => {
                 let itemsSkipped = ttsInstance.requestStop(runtimeData.skips);
                 runtimeData.skips -= itemsSkipped;
                 console.log("TTS Skipped in queue: ", itemsSkipped);
+                console.log("Current skips queued: ", runtimeData.skips);
                 //return;
                 break;
             case 'mute':
