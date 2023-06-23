@@ -14,6 +14,7 @@ const runtimeData = {
     skips: 0,
     isMuted: false,
     usernames: [],
+    lastRaidTime: new Date(0, 0),
 }
 
 const ttsInstance = new BrianTTS();
@@ -37,6 +38,10 @@ StreamElementsEventsSubscription.subscribe((_data) => {
     if (config.usernameBlacklist.includes(streamEvent.username)) {
         console.log(`FrankTTS: Event from blacklisted username : ${streamEvent.username}`);
         return;
+    }
+
+    if (streamEvent.type === 'raid') {
+        runtimeData.lastRaidTime = new Date();
     }
 
     //console.log(streamEvent);
@@ -80,13 +85,14 @@ StreamElementsEventsSubscription.subscribe((_data) => {
         }
     }
 
+
+
     if (streamEvent.type !== 'command' && runtimeData.isMuted) {
         console.log("FrankTTS: Event received but is currently muted");
         return;
     }
 
     //Command Logic
-
 
     if (streamEvent.type !== 'command' && runtimeData.skips > 0) {
         //By returning this event does not get processed.
@@ -95,7 +101,7 @@ StreamElementsEventsSubscription.subscribe((_data) => {
         return;
     }
 
-    const conditionalMessage = (_data, _usernames) => {
+    const greetFirstMessage = (_data, _usernames) => {
         if (_data.type !== 'message')
             return '';
 
@@ -111,13 +117,31 @@ StreamElementsEventsSubscription.subscribe((_data) => {
         if (!_usernames.includes(_data.username)) {
             _usernames.push(_data.username);
 
-            return messages[Math.floor(Math.random() * messages.length)].replace('${username}', _data.username.replace('w01f_k', ' wolf ').replace('_', ' ').trim());
+            const secondsSinceRaid = (new Date() - runtimeData.lastRaidTime) / 1000;
+            if (secondsSinceRaid > config.raidConfig.firstMessageTimeout) {
+                const newMessageResponse = messages[Math.floor(Math.random() * messages.length)]
+                    .replace(
+                        '${username}',
+                        _data.username
+                            .replace('fariaorion', 'fohreo mec flurry')
+                            .replace('waterkattv', 'waterkat')
+                            .replace('w01f_k', 'wolf')
+                            .replace('palerider_pr80', 'pale')
+                            .replace('ursidaecrow', 'ursiday')
+                            .replace('tundraflame', 'tundra')
+                            .replace('sunpathos', 'sun')
+                            .replace('_', ' ').trim()
+                    );
+                return newMessageResponse;
+            }else{
+                console.log('FrankTTS: Raid timeout is still active');
+            }
         }
 
         return '';
     };
 
-    reply = reply || conditionalMessage(streamEvent, runtimeData.usernames);
+    reply = reply || greetFirstMessage(streamEvent, runtimeData.usernames);
 
     //Testing
     reply = reply || StreamEventInterpreter.responseToEvent(streamEvent);
