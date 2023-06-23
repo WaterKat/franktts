@@ -1,4 +1,8 @@
 
+const raidConfig = {
+    firstMessageTimeout: 30,
+};
+
 const usernameBlacklist = [
     'nightbot',
     'streamelements',
@@ -30,4 +34,5 @@ module.exports = {
     usernameBlacklist: usernameBlacklist,
     imageSources: imageSources,
     emoteWhitelist : emoteWhitelist,
+    raidConfig: raidConfig,
 }
