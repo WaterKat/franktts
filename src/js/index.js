@@ -2,11 +2,12 @@ const authData = require('./authentication/index.js');
 const userConfig = require('./database/index.js').getCollection(authData.userID);
 
 const BrianTTS = require("./text-to-speech/briantts.js");
-const TTSFilter = require("./text-to-speech/ttsfilter.js");
 const StreamElementsEventsSubscription = require("./stream-events/stream-elements-listener.js");
 const StreamEventProcessor = require("./stream-events/stream-elements-translator.js");
 const CommandSystem = require("./command-system.js");
 
+const TTSFilter = require('./text-processing/index.js');
+const ttsFilter = new TTSFilter(userConfig.filters.words, userConfig.filters.emotes.whitelist);
 
 const SimpleMessageResponder = require('./responses/index.js');
 const simpleMessageResponder = new SimpleMessageResponder(userConfig.responses);
@@ -157,8 +158,7 @@ StreamElementsEventsSubscription.subscribe((_data) => {
 
     reply = reply || simpleMessageResponder.respondToEvent(streamEvent);
 
-    const blacklistedEmotes = TTSFilter.emotesToBlackList(streamEvent.emotes);
-    const filteredText = TTSFilter.filterALL(reply, blacklistedEmotes);
+    const filteredText = ttsFilter.filterAll(reply, _data.emotes);
     ttsInstance.enqueueRequest(filteredText);
 });
 
