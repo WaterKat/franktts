@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/WaterKat/franktts#readme",
   "devDependencies": {
+    "copy-webpack-plugin": "^11.0.0",
     "webpack": "^5.88.0",
     "webpack-cli": "^5.1.4"
   },

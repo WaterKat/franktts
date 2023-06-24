@@ -7,7 +7,14 @@ const StreamElementsEventsSubscription = require("./stream-events/stream-element
 const StreamEventProcessor = require("./stream-events/stream-elements-translator.js");
 const StreamEventInterpreter = require("./stream-events/stream-events.js");
 const CommandSystem = require("./command-system.js");
-const characterCanvas = document.getElementById('canvas1');
+
+let characterCanvas = document.getElementById('canvas1');
+if (!characterCanvas){
+    const newCanvas = document.createElement('canvas');
+    newCanvas.id = 'canvas1';
+    characterCanvas = newCanvas;
+    document.body.appendChild(newCanvas);
+}
 const characterInstance = new Character(characterCanvas);
 
 const runtimeData = {
