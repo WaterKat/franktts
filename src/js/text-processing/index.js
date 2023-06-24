@@ -22,6 +22,9 @@ class TTSFilter{
     }
 
     filterAll(_text, _emotes = [], _blacklist = []){
+        if (!_text)
+            return '';
+
         let response = _text;
 
         response = this.filterBadChars(response);
