@@ -1,6 +1,6 @@
-const config = require("./config.js");
+const authData = require('./authentication/index.js');
+const userConfig = require('./database/index.js').getCollection(authData.userID);
 
-const Character = require("./rendering/character.js");
 const BrianTTS = require("./text-to-speech/briantts.js");
 const TTSFilter = require("./text-to-speech/ttsfilter.js");
 const StreamElementsEventsSubscription = require("./stream-events/stream-elements-listener.js");
@@ -8,6 +8,7 @@ const StreamEventProcessor = require("./stream-events/stream-elements-translator
 const StreamEventInterpreter = require("./stream-events/stream-events.js");
 const CommandSystem = require("./command-system.js");
 
+const PNGTuber = require("./pngtuber/index.js");
 let characterCanvas = document.getElementById('canvas1');
 if (!characterCanvas){
     const newCanvas = document.createElement('canvas');
@@ -15,7 +16,7 @@ if (!characterCanvas){
     characterCanvas = newCanvas;
     document.body.appendChild(newCanvas);
 }
-const characterInstance = new Character(characterCanvas);
+const characterInstance = new PNGTuber(characterCanvas, userConfig.pngTuber.sources);
 
 const runtimeData = {
     skips: 0,
@@ -42,7 +43,7 @@ StreamElementsEventsSubscription.subscribe((_data) => {
     console.log(streamEvent);
 
     //Blacklist check
-    if (config.usernameBlacklist.includes(streamEvent.username)) {
+    if (userConfig.admin.blacklist.includes(streamEvent.username)) {
         console.log(`FrankTTS: Event from blacklisted username : ${streamEvent.username}`);
         return;
     }
@@ -125,7 +126,7 @@ StreamElementsEventsSubscription.subscribe((_data) => {
             _usernames.push(_data.username);
 
             const secondsSinceRaid = (new Date() - runtimeData.lastRaidTime) / 1000;
-            if (secondsSinceRaid > config.raidConfig.firstMessageTimeout) {
+            if (secondsSinceRaid > userConfig.behaviour.raid.ignoreFirstMessageForSeconds) {
                 const newMessageResponse = messages[Math.floor(Math.random() * messages.length)]
                     .replace(
                         '${username}',
