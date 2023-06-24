@@ -1,0 +1,33 @@
+{
+  "name": "franktts",
+  "version": "0.4.0",
+  "description": "A TTS Bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo test command",
+    "build": "webpack --config webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WaterKat/franktts.git"
+  },
+  "keywords": [
+    "tts",
+    "frank",
+    "bot",
+    "twitch"
+  ],
+  "author": "Jacob Vallecillo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WaterKat/franktts/issues"
+  },
+  "homepage": "https://github.com/WaterKat/franktts#readme",
+  "devDependencies": {
+    "webpack": "^5.88.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}
