@@ -1,5 +1,3 @@
-const responses = require('./responses.js');
-
 const database = {
     'fariaorion': {
         admin: {
