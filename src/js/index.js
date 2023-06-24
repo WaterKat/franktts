@@ -5,8 +5,12 @@ const BrianTTS = require("./text-to-speech/briantts.js");
 const TTSFilter = require("./text-to-speech/ttsfilter.js");
 const StreamElementsEventsSubscription = require("./stream-events/stream-elements-listener.js");
 const StreamEventProcessor = require("./stream-events/stream-elements-translator.js");
-const StreamEventInterpreter = require("./stream-events/stream-events.js");
 const CommandSystem = require("./command-system.js");
+
+
+const SimpleMessageResponder = require('./responses/index.js');
+const simpleMessageResponder = new SimpleMessageResponder(userConfig.responses);
+
 
 const PNGTuber = require("./pngtuber/index.js");
 let characterCanvas = document.getElementById('canvas1');
@@ -151,8 +155,7 @@ StreamElementsEventsSubscription.subscribe((_data) => {
 
     reply = reply || greetFirstMessage(streamEvent, runtimeData.usernames);
 
-    //Testing
-    reply = reply || StreamEventInterpreter.responseToEvent(streamEvent);
+    reply = reply || simpleMessageResponder.respondToEvent(streamEvent);
 
     const blacklistedEmotes = TTSFilter.emotesToBlackList(streamEvent.emotes);
     const filteredText = TTSFilter.filterALL(reply, blacklistedEmotes);
