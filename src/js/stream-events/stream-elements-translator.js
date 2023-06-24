@@ -1,5 +1,3 @@
-const StreamElements = require('./stream-elements-listener.js');
-
 class StreamEventProcessor {
     static #stream_event = {
         username: '',
