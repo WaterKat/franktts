@@ -19,6 +19,8 @@ class CharFilter {
         if (this.filterNonUnicode) {
             response = response.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, this.replacement);
         }
+
+        return response;
     }
 }
 
