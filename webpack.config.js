@@ -7,7 +7,7 @@ const sourcePath = path.resolve(__dirname, 'src');
 const buildPath = path.resolve(__dirname, 'dist');
 
 module.exports = {
-//    mode: 'development',
+    mode: 'development',
     entry: path.resolve(sourcePath, 'js', 'index.js'),
     output: {
         filename: 'bundle.js',
