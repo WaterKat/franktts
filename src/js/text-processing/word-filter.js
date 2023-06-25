@@ -6,6 +6,9 @@ class WordFilter {
     }
 
     filter(_text) {
+        if (!_text)
+            return '';
+
         let response = _text;
 
         this.filteredWords.forEach(word => {

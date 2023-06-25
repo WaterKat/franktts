@@ -8,6 +8,9 @@ class CharFilter {
     }
 
     filter(_text) {
+        if (!_text)
+            return '';
+
         let response = _text;
 
         if (this.filterEmojis) {
