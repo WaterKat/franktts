@@ -5,7 +5,6 @@ const userConfig = require('./database/index.js').getCollection(authData.userID)
 const BrianTTS = require("./text-to-speech/briantts.js");
 const StreamElementsEventsSubscription = require("./stream-events/stream-elements-listener.js");
 const StreamEventProcessor = require("./stream-events/stream-elements-translator.js");
-const CommandSystem = require("./command-system.js");
 
 
 const TTSFilter = require('./text-processing/index.js');
