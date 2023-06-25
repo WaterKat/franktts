@@ -16,7 +16,6 @@ const SimpleMessageResponder = require('./responses/index.js');
 const simpleMessageResponder = new SimpleMessageResponder(userConfig.responses);
 
 
-const PNGTuber = require("./pngtuber/index.js");
 let characterCanvas = document.getElementById('canvas1');
 if (!characterCanvas){
     const newCanvas = document.createElement('canvas');
@@ -24,6 +23,7 @@ if (!characterCanvas){
     characterCanvas = newCanvas;
     document.body.appendChild(newCanvas);
 }
+const PNGTuber = require("./pngtuber/index.js");
 const characterInstance = new PNGTuber(characterCanvas, userConfig.pngTuber.sources);
 
 
@@ -166,5 +166,6 @@ StreamElementsEventsSubscription.subscribe((_data) => {
 
     ttsInstance.enqueueRequest(filteredText);
 });
+
 
 ttsInstance.enqueueRequest("What's up star beans. My name is Frank.");

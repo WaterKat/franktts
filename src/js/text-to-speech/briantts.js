@@ -1,4 +1,4 @@
-const Subscription = require('../subscription-methods/subscription.js');
+const Subscription = require('../dev-tools/subscription.js');
 
 class BrianTTS {
     time_between_messages = 0.5;
