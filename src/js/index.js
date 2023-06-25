@@ -3,8 +3,8 @@ const userConfig = require('./database/index.js').getCollection(authData.userID)
 
 
 const BrianTTS = require("./text-to-speech/index.js");
-const StreamElementsEventsSubscription = require("./stream-events/stream-elements-listener.js");
-const StreamEventProcessor = require("./stream-events/stream-elements-translator.js");
+const StreamElementsEventsSubscription = require("./stream-events/index.js").StreamElementsEvents.activeSubscription;
+const StreamEventProcessor = require("./stream-events/index.js").StreamEventProcessor;
 
 
 const TTSFilter = require('./text-processing/index.js');

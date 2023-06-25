@@ -15,4 +15,6 @@ window.addEventListener('onEventReceived', function (obj) {
     StreamElementsEventSubscription.invoke({ key: listener, event: event });
 });
 
-module.exports = StreamElementsEventSubscription;
+module.exports = {
+    activeSubscription : StreamElementsEventSubscription,
+}
