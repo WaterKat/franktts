@@ -1,13 +1,16 @@
 const authData = require('./authentication/index.js');
 const userConfig = require('./database/index.js').getCollection(authData.userID);
 
+
 const BrianTTS = require("./text-to-speech/briantts.js");
 const StreamElementsEventsSubscription = require("./stream-events/stream-elements-listener.js");
 const StreamEventProcessor = require("./stream-events/stream-elements-translator.js");
 const CommandSystem = require("./command-system.js");
 
+
 const TTSFilter = require('./text-processing/index.js');
 const ttsFilter = new TTSFilter(userConfig.filters.words, userConfig.filters.emotes.whitelist);
+
 
 const SimpleMessageResponder = require('./responses/index.js');
 const simpleMessageResponder = new SimpleMessageResponder(userConfig.responses);
@@ -23,6 +26,7 @@ if (!characterCanvas){
 }
 const characterInstance = new PNGTuber(characterCanvas, userConfig.pngTuber.sources);
 
+
 const runtimeData = {
     skips: 0,
     isMuted: false,
@@ -30,12 +34,14 @@ const runtimeData = {
     lastRaidTime: new Date(0, 0),
 }
 
+
 const ttsInstance = new BrianTTS();
 ttsInstance.addAmplitudeSubscriptor(
     (_amplitude) => {
         characterInstance.update_amplitude(_amplitude);
     }
 );
+
 
 StreamElementsEventsSubscription.subscribe((_data) => {
     const streamEvent = StreamEventProcessor.ProcessStreamElementEvent(_data);
@@ -98,8 +104,6 @@ StreamElementsEventsSubscription.subscribe((_data) => {
         }
     }
 
-
-
     if (streamEvent.type !== 'command' && runtimeData.isMuted) {
         console.log("FrankTTS: Event received but is currently muted");
         return;
@@ -159,6 +163,7 @@ StreamElementsEventsSubscription.subscribe((_data) => {
     reply = reply || simpleMessageResponder.respondToEvent(streamEvent);
 
     const filteredText = ttsFilter.filterAll(reply, _data.emotes);
+
     ttsInstance.enqueueRequest(filteredText);
 });
 
