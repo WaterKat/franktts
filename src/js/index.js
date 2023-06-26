@@ -3,10 +3,6 @@ const userConfig = require('./database/index.js').getCollection(authData.userID)
 
 const AonyxEventListener = require('./stream-events/index.js').GetStreamEventListener(userConfig.admin.permissions);
 
-//const StreamElementsEventsSubscription = require("./stream-events/index.js").StreamElementsEvents.activeSubscription;
-//const StreamEventProcessor = require("./stream-events/index.js").StreamEventProcessor;
-
-
 const BrianTTS = require("./text-to-speech/index.js");
 
 const TTSFilter = require('./text-processing/index.js');

@@ -23,6 +23,4 @@ function GetStreamEventListener(_permissions) {
 
 module.exports = {
     GetStreamEventListener : GetStreamEventListener,
-    StreamElementsEvents: require('./stream-elements-listener.js'),
-    StreamEventProcessor: require('./stream-elements-translator.js'),
 }
