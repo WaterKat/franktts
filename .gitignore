@@ -1,0 +1,10 @@
+# Ignore files/directories starting with a period
+*
+
+!.gitignore
+!/src/*
+!/src/**/
+!/src/**/*
+!package.json
+!README.md
+!webpack.config.js
