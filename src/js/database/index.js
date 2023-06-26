@@ -7,6 +7,14 @@ const database = {
                 vip: [],
                 subscriber: [],
             },
+            nicknames: {
+                'fariaorion' :      ['onion', 'fohreo mec flurry', 'fari', 'fario', 'freddy', 'faria'],
+                'waterkattv' :      ['the cat', 'waterkat', 'bozo', 'daddy'],
+                'w01f_k' :          ['wolf', 'woof woof'],
+                'palerider_pr80' :  ['pale', 'pale rider', 'paw lay'],
+                'tundraflame' :     ['tundra', 'tundra flame'],
+                'sunpathos' :       ['sun', 'sunny', 'sun pahthos'],
+            },
             blacklist: [
                 'nightbot',
                 'streamelements',
