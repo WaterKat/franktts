@@ -161,7 +161,13 @@ StreamElementsEventsSubscription.subscribe((_data) => {
 
     reply = reply || simpleMessageResponder.respondToEvent(streamEvent);
 
-    const filteredText = ttsFilter.filterAll(reply, _data.emotes);
+    if (streamEvent.type === 'sub' || streamEvent.type=== 'gift-bomb-sender' || streamEvent.type === 'gift-single'){
+        if (streamEvent.message){
+            reply = reply + streamEvent.message;
+        }
+    }
+
+    const filteredText = ttsFilter.filterAll(reply, streamEvent.emotes);
 
     ttsInstance.enqueueRequest(filteredText);
 });
