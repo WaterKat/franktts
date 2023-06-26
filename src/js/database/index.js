@@ -1,6 +1,12 @@
 const database = {
     'fariaorion': {
         admin: {
+            permissions: {
+                streamer: [],
+                moderator: [],
+                vip: [],
+                subscriber: [],
+            },
             blacklist: [
                 'nightbot',
                 'streamelements',

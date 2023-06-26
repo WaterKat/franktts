@@ -1,12 +1,9 @@
 const authData = require('./authentication/index.js');
 const userConfig = require('./database/index.js').getCollection(authData.userID);
 
+const AonyxEventListener = require('./stream-events/index.js').GetStreamEventListener(userConfig.admin.permissions);
 
-const BrianTTS = require("./text-to-speech/briantts.js");
-const StreamElementsEventsSubscription = require("./stream-events/stream-elements-listener.js");
-const StreamEventProcessor = require("./stream-events/stream-elements-translator.js");
-const CommandSystem = require("./command-system.js");
-
+const BrianTTS = require("./text-to-speech/index.js");
 
 const TTSFilter = require('./text-processing/index.js');
 const ttsFilter = new TTSFilter(userConfig.filters.words, userConfig.filters.emotes.whitelist);
@@ -16,7 +13,6 @@ const SimpleMessageResponder = require('./responses/index.js');
 const simpleMessageResponder = new SimpleMessageResponder(userConfig.responses);
 
 
-const PNGTuber = require("./pngtuber/index.js");
 let characterCanvas = document.getElementById('canvas1');
 if (!characterCanvas){
     const newCanvas = document.createElement('canvas');
@@ -24,6 +20,7 @@ if (!characterCanvas){
     characterCanvas = newCanvas;
     document.body.appendChild(newCanvas);
 }
+const PNGTuber = require("./pngtuber/index.js");
 const characterInstance = new PNGTuber(characterCanvas, userConfig.pngTuber.sources);
 
 
@@ -42,9 +39,7 @@ ttsInstance.addAmplitudeSubscriptor(
     }
 );
 
-
-StreamElementsEventsSubscription.subscribe((_data) => {
-    const streamEvent = StreamEventProcessor.ProcessStreamElementEvent(_data);
+AonyxEventListener.activeSubscription.subscribe((streamEvent) => {
 
     //ignore simulated events
     if (streamEvent.type.startsWith('event')) {
@@ -162,9 +157,16 @@ StreamElementsEventsSubscription.subscribe((_data) => {
 
     reply = reply || simpleMessageResponder.respondToEvent(streamEvent);
 
-    const filteredText = ttsFilter.filterAll(reply, _data.emotes);
+    if (streamEvent.type === 'sub' || streamEvent.type=== 'gift-bomb-sender' || streamEvent.type === 'gift-single'){
+        if (streamEvent.message){
+            reply = reply + '. ' + streamEvent.message;
+        }
+    }
+
+    const filteredText = ttsFilter.filterAll(reply, streamEvent.emotes);
 
     ttsInstance.enqueueRequest(filteredText);
 });
+
 
 ttsInstance.enqueueRequest("What's up star beans. My name is Frank.");

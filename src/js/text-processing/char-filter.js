@@ -1,5 +1,3 @@
-const TTSFilter = require(".");
-
 class CharFilter {
     constructor(_filterNonUnicode = true, _filterEmojis = true, _replacement = '') {
         this.filterNonUnicode = _filterNonUnicode;
