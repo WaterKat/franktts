@@ -1,4 +1,4 @@
-const Subscription = require('../../dev-tools/subscription.js');
+const Subscription = require('../../dev-tools/index.js').Subscription;
 
 class AonyxEventListener{
     activeSubscription = new Subscription();
