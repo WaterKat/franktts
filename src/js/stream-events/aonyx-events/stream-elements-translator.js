@@ -9,43 +9,43 @@ class StreamElementsEventTranslator {
         const streamEvent = new AonyxStreamEvent();
 
         //SHOULD BE MOVED OUTSIDE
-        StreamEventProcessor.#updatePermissions(_data, this.permissions);
+        StreamElementsEventTranslator.#updatePermissions(_data, this.permissions);
 
         //username
-        streamEvent.username = StreamEventProcessor.#getUsername(_data);
+        streamEvent.username = StreamElementsEventTranslator.#getUsername(_data);
 
         //permissions
-        streamEvent.permissions = StreamEventProcessor.#getPermissions(streamEvent.username, this.permissions);
+        streamEvent.permissions = StreamElementsEventTranslator.#getPermissions(streamEvent.username, this.permissions);
 
         //type
-        streamEvent.type = StreamEventProcessor.#getType(_data);
+        streamEvent.type = StreamElementsEventTranslator.#getType(_data);
 
         //message
-        streamEvent.message = StreamEventProcessor.#getMessage(_data);
+        streamEvent.message = StreamElementsEventTranslator.#getMessage(_data);
 
         //emotes
-        streamEvent.emote = StreamEventProcessor.#getEmotes(_data);
+        streamEvent.emote = StreamElementsEventTranslator.#getEmotes(_data);
 
         //follow
-        //streamEvent.follow = StreamEventProcessor.#getFollow(_data);
+        //streamEvent.follow = StreamElementsEventTranslator.#getFollow(_data);
 
         //sub
-        streamEvent.sub = StreamEventProcessor.#getSub(_data);
+        streamEvent.sub = StreamElementsEventTranslator.#getSub(_data);
 
         //gift
-        streamEvent.gift = StreamEventProcessor.#getGift(_data);
+        streamEvent.gift = StreamElementsEventTranslator.#getGift(_data);
 
         //raid
-        streamEvent.raid = StreamEventProcessor.#getRaid(_data);
+        streamEvent.raid = StreamElementsEventTranslator.#getRaid(_data);
 
         //cheer
-        streamEvent.cheer = StreamEventProcessor.#getCheer(_data);
+        streamEvent.cheer = StreamElementsEventTranslator.#getCheer(_data);
 
         //chat
-        //streamEvent.chat = StreamEventProcessor.#getChat(_data);
+        //streamEvent.chat = StreamElementsEventTranslator.#getChat(_data);
 
         //command
-        streamEvent.command = StreamEventProcessor.#getCommand(_data);
+        streamEvent.command = StreamElementsEventTranslator.#getCommand(_data);
         if (streamEvent.command.isValid){
             streamEvent.type = 'command'
         }
@@ -54,7 +54,7 @@ class StreamElementsEventTranslator {
     };
 
     static #updatePermissions(_data, _permissions) {
-        const username = StreamEventProcessor.#getUsername(_data);
+        const username = StreamElementsEventTranslator.#getUsername(_data);
 
         if (!_permissions)
             return;
