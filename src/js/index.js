@@ -14,7 +14,7 @@ const simpleMessageResponder = new SimpleMessageResponder(userConfig.responses);
 
 
 let characterCanvas = document.getElementById('canvas1');
-if (!characterCanvas){
+if (!characterCanvas) {
     const newCanvas = document.createElement('canvas');
     newCanvas.id = 'canvas1';
     characterCanvas = newCanvas;
@@ -40,13 +40,25 @@ ttsInstance.addAmplitudeSubscriptor(
 );
 
 AonyxEventListener.activeSubscription.subscribe((streamEvent) => {
-
     //ignore simulated events
     if (streamEvent.type.startsWith('event')) {
         return;
     }
 
+
+    //nickname
+    if (!streamEvent.nickname) {
+        const nicknameTable = userConfig.admin.nicknames[streamEvent.username];
+        if (!nicknameTable) {
+            streamEvent.nickname = streamEvent.username.replace('_', ' ');
+        } else {
+            streamEvent.nickname = nicknameTable[Math.floor(Math.random() * nicknameTable.length)];
+        }
+    }
+
+
     console.log(streamEvent);
+
 
     //Blacklist check
     if (userConfig.admin.blacklist.includes(streamEvent.username)) {
@@ -54,6 +66,8 @@ AonyxEventListener.activeSubscription.subscribe((streamEvent) => {
         return;
     }
 
+
+    //Latest Raid Check
     if (streamEvent.type === 'raid') {
         runtimeData.lastRaidTime = new Date();
     }
@@ -145,7 +159,7 @@ AonyxEventListener.activeSubscription.subscribe((streamEvent) => {
                             .replace('_', ' ').trim()
                     );
                 return newMessageResponse;
-            }else{
+            } else {
                 console.log('FrankTTS: Raid timeout is still active');
             }
         }
@@ -157,8 +171,8 @@ AonyxEventListener.activeSubscription.subscribe((streamEvent) => {
 
     reply = reply || simpleMessageResponder.respondToEvent(streamEvent);
 
-    if (streamEvent.type === 'sub' || streamEvent.type=== 'gift-bomb-sender' || streamEvent.type === 'gift-single'){
-        if (streamEvent.message){
+    if (streamEvent.type === 'sub' || streamEvent.type === 'gift-bomb-sender' || streamEvent.type === 'gift-single') {
+        if (streamEvent.message) {
             reply = reply + '. ' + streamEvent.message;
         }
     }
