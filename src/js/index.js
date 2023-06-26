@@ -159,7 +159,7 @@ AonyxEventListener.activeSubscription.subscribe((streamEvent) => {
 
     if (streamEvent.type === 'sub' || streamEvent.type=== 'gift-bomb-sender' || streamEvent.type === 'gift-single'){
         if (streamEvent.message){
-            reply = reply + streamEvent.message;
+            reply = reply + '. ' + streamEvent.message;
         }
     }
 
