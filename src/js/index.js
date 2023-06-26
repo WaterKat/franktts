@@ -132,12 +132,12 @@ AonyxEventListener.activeSubscription.subscribe((streamEvent) => {
             return '';
 
         const messages = [
-            "Welcome, ${username}! Enjoy the cosmic vibes!",
-            "Greetings, ${username}! Thanks for joining us!",
-            "Hello there, ${username}! It's great to see you in the chat!",
-            "Hey, ${username}! The cosmic adventure begins now. Buckle up!",
-            "Greetings, ${username}! Your presence makes the stream shine brighter!",
-            "Welcome, ${username}! Your arrival brings a new spark to the cosmic journey!",
+            "Welcome, ${nickname}! Enjoy the cosmic vibes!",
+            "Greetings, ${nickname}! Thanks for joining us!",
+            "Hello there, ${nickname}! It's great to see you in the chat!",
+            "Hey, ${nickname}! The cosmic adventure begins now. Buckle up!",
+            "Greetings, ${nickname}! Your presence makes the stream shine brighter!",
+            "Welcome, ${nickname}! Your arrival brings a new spark to the cosmic journey!",
         ];
 
         if (!_usernames.includes(_data.username)) {
@@ -146,18 +146,7 @@ AonyxEventListener.activeSubscription.subscribe((streamEvent) => {
             const secondsSinceRaid = (new Date() - runtimeData.lastRaidTime) / 1000;
             if (secondsSinceRaid > userConfig.behaviour.raid.ignoreFirstMessageForSeconds) {
                 const newMessageResponse = messages[Math.floor(Math.random() * messages.length)]
-                    .replace(
-                        '${username}',
-                        _data.username
-                            .replace('fariaorion', 'fohreo mec flurry')
-                            .replace('waterkattv', 'waterkat')
-                            .replace('w01f_k', 'wolf')
-                            .replace('palerider_pr80', 'pale')
-                            .replace('ursidaecrow', 'ursiday')
-                            .replace('tundraflame', 'tundra')
-                            .replace('sunpathos', 'sun')
-                            .replace('_', ' ').trim()
-                    );
+                    .replace('${nickname}', _data.nickname);
                 return newMessageResponse;
             } else {
                 console.log('FrankTTS: Raid timeout is still active');
