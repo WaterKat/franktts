@@ -10,7 +10,7 @@ function GetStreamEventListener(_permissions) {
 
 
     streamelementsEventListener.activeSubscription.subscribe(
-        (_streamElementsEvent) => {
+        (_streamelementsEvent) => {
             aonyxEventListener.passthrough(
                 streamelementsEventTranslator.processStreamElementEvent(_streamelementsEvent)
             );
