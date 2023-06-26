@@ -1,43 +1,60 @@
-const StreamElements = require('./stream-elements-listener.js');
+const AonyxStreamEvent = require('./stream-event.js');
 
-class StreamEventProcessor {
-    static #stream_event = {
-        username: '',
-        permissions: ['chatter'],
-        type: '',
-        message: '',
-        emotes: [],
-        follow: {
-        },
-        sub: {
-            length: 0,
-        },
-        gift: {
-            sender: '',
-            count: 1,
-            isInitial: '',
-            isGifted: '',
-            isBulk: '',
-        },
-        raid: {
-            count: 0,
-        },
-        cheer: {
-            amount: 0,
-        },
-        chat: {
-        },
-        command: {
-            identifier: '',
-            group: '',
-            request: '',
-            args: '',
-            isValid: false,
-        }
+class StreamElementsEventTranslator {
+    constructor(_permissions){
+        this.permissions = _permissions;
     }
 
+    processStreamElementEvent(_data) {
+        const streamEvent = new AonyxStreamEvent();
+
+        //SHOULD BE MOVED OUTSIDE
+        StreamElementsEventTranslator.#updatePermissions(_data, this.permissions);
+
+        //username
+        streamEvent.username = StreamElementsEventTranslator.#getUsername(_data);
+
+        //permissions
+        streamEvent.permissions = StreamElementsEventTranslator.#getPermissions(streamEvent.username, this.permissions);
+
+        //type
+        streamEvent.type = StreamElementsEventTranslator.#getType(_data);
+
+        //message
+        streamEvent.message = StreamElementsEventTranslator.#getMessage(_data);
+
+        //emotes
+        streamEvent.emote = StreamElementsEventTranslator.#getEmotes(_data);
+
+        //follow
+        //streamEvent.follow = StreamElementsEventTranslator.#getFollow(_data);
+
+        //sub
+        streamEvent.sub = StreamElementsEventTranslator.#getSub(_data);
+
+        //gift
+        streamEvent.gift = StreamElementsEventTranslator.#getGift(_data);
+
+        //raid
+        streamEvent.raid = StreamElementsEventTranslator.#getRaid(_data);
+
+        //cheer
+        streamEvent.cheer = StreamElementsEventTranslator.#getCheer(_data);
+
+        //chat
+        //streamEvent.chat = StreamElementsEventTranslator.#getChat(_data);
+
+        //command
+        streamEvent.command = StreamElementsEventTranslator.#getCommand(_data);
+        if (streamEvent.command.isValid){
+            streamEvent.type = 'command'
+        }
+
+        return streamEvent;
+    };
+
     static #updatePermissions(_data, _permissions) {
-        const username = StreamEventProcessor.#getUsername(_data);
+        const username = StreamElementsEventTranslator.#getUsername(_data);
 
         if (!_permissions)
             return;
@@ -265,63 +282,9 @@ class StreamEventProcessor {
         return response;
     }
 
-    static ProcessStreamElementEvent(_data) {
-        const streamEvent = Object.create(StreamEventProcessor.#stream_event);
 
-        //temp
-        const permissions = {
-            streamer: [],
-            moderator: [],
-            vip: [],
-            subscriber: [],
-        };
-
-        //SHOULD BE MOVED OUTSIDE
-        StreamEventProcessor.#updatePermissions(_data, permissions);
-
-        //username
-        streamEvent.username = StreamEventProcessor.#getUsername(_data);
-
-        //permissions
-        streamEvent.permissions = StreamEventProcessor.#getPermissions(streamEvent.username, permissions);
-
-        //type
-        streamEvent.type = StreamEventProcessor.#getType(_data);
-
-        //message
-        streamEvent.message = StreamEventProcessor.#getMessage(_data);
-
-        //emotes
-        streamEvent.emote = StreamEventProcessor.#getEmotes(_data);
-
-        //follow
-        //streamEvent.follow = StreamEventProcessor.#getFollow(_data);
-
-        //sub
-        streamEvent.sub = StreamEventProcessor.#getSub(_data);
-
-        //gift
-        streamEvent.gift = StreamEventProcessor.#getGift(_data);
-
-        //raid
-        streamEvent.raid = StreamEventProcessor.#getRaid(_data);
-
-        //cheer
-        streamEvent.cheer = StreamEventProcessor.#getCheer(_data);
-
-        //chat
-        //streamEvent.chat = StreamEventProcessor.#getChat(_data);
-
-        //command
-        streamEvent.command = StreamEventProcessor.#getCommand(_data);
-        if (streamEvent.command.isValid){
-            streamEvent.type = 'command'
-        }
-
-        return streamEvent;
-    };
 }
 
 
 
-module.exports = StreamEventProcessor;
+module.exports = StreamElementsEventTranslator;
