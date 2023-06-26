@@ -1,11 +1,13 @@
 const authData = require('./authentication/index.js');
 const userConfig = require('./database/index.js').getCollection(authData.userID);
 
+const AonyxEventListener = require('./stream-events/index.js').GetStreamEventListener(userConfig.admin.permissions);
+
+//const StreamElementsEventsSubscription = require("./stream-events/index.js").StreamElementsEvents.activeSubscription;
+//const StreamEventProcessor = require("./stream-events/index.js").StreamEventProcessor;
+
 
 const BrianTTS = require("./text-to-speech/index.js");
-const StreamElementsEventsSubscription = require("./stream-events/index.js").StreamElementsEvents.activeSubscription;
-const StreamEventProcessor = require("./stream-events/index.js").StreamEventProcessor;
-
 
 const TTSFilter = require('./text-processing/index.js');
 const ttsFilter = new TTSFilter(userConfig.filters.words, userConfig.filters.emotes.whitelist);
@@ -41,9 +43,7 @@ ttsInstance.addAmplitudeSubscriptor(
     }
 );
 
-
-StreamElementsEventsSubscription.subscribe((_data) => {
-    const streamEvent = StreamEventProcessor.ProcessStreamElementEvent(_data);
+AonyxEventListener.activeSubscription.subscribe((streamEvent) => {
 
     //ignore simulated events
     if (streamEvent.type.startsWith('event')) {
