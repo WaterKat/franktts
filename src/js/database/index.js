@@ -8,7 +8,7 @@ const database = {
                 subscriber: [],
             },
             nicknames: {
-                'fariaorion' :      ['onion', 'fohreo mec flurry', 'fari', 'fario', 'freddy', 'faria'],
+                'fariaorion' :      ['onion', 'fohreo mec flurry', 'fari', 'fario', 'freddy', 'faria', 'faris', 'froggia oh ribbit'],
                 'waterkattv' :      ['the cat', 'waterkat'],
                 'w01f_k' :          ['wolf', 'woof woof'],
                 'palerider_pr80' :  ['pale', 'pale rider', 'paw lay'],

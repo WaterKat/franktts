@@ -13,6 +13,10 @@ const SimpleMessageResponder = require('./responses/index.js');
 const simpleMessageResponder = new SimpleMessageResponder(userConfig.responses);
 
 
+import { setData, getData } from "./database/firestore/index.js";
+setData(authData.userID, userConfig);
+
+
 let characterCanvas = document.getElementById('canvas1');
 if (!characterCanvas) {
     const newCanvas = document.createElement('canvas');
