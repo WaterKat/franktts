@@ -1,10 +1,12 @@
 const Subscription = require('../../dev-tools/subscription.js');
 
+
 class StreamElementsEventListener{
-    activeSubscription = new Subscription();
-    
     constructor(){
-        window.addEventListener('onEventReceived', this.#processEvent);
+        this.activeSubscription = new Subscription();
+        this.processEvent = this.#processEvent.bind(this);
+
+        window.addEventListener('onEventReceived', this.processEvent);
     }
 
     #processEvent(_eventData){
@@ -17,7 +19,7 @@ class StreamElementsEventListener{
 
         this.activeSubscription.invoke({
             key: _eventData.detail.listener.split("-")[0],
-            event: obj.detail.event,
+            event: _eventData.detail.event,
         });      
     }
 }
