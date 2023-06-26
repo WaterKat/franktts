@@ -11,6 +11,7 @@ class SimpleMessageResponder {
         if (responseArray) {
             let rawResponse = responseArray[Math.floor(Math.random() * responseArray.length)]
                 .replace('${username}', _data.username)
+                .replace('${nickname}', _data.nickname)
                 .replace('${sub.length}', _data.sub.length)
                 .replace('${gift.sender}', _data.gift.sender)
                 .replace('${gift.count}', _data.gift.count)
