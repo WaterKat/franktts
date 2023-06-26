@@ -1,12 +1,17 @@
-const config = require("./config.js");
+const authData = require('./authentication/index.js');
+const userConfig = require('./database/index.js').getCollection(authData.userID);
 
-const Character = require("./rendering/character.js");
-const BrianTTS = require("./text-to-speech/briantts.js");
-const TTSFilter = require("./text-to-speech/ttsfilter.js");
-const StreamElementsEventsSubscription = require("./stream-events/stream-elements-listener.js");
-const StreamEventProcessor = require("./stream-events/stream-elements-translator.js");
-const StreamEventInterpreter = require("./stream-events/stream-events.js");
-const CommandSystem = require("./command-system.js");
+const AonyxEventListener = require('./stream-events/index.js').GetStreamEventListener(userConfig.admin.permissions);
+
+const BrianTTS = require("./text-to-speech/index.js");
+
+const TTSFilter = require('./text-processing/index.js');
+const ttsFilter = new TTSFilter(userConfig.filters.words, userConfig.filters.emotes.whitelist);
+
+
+const SimpleMessageResponder = require('./responses/index.js');
+const simpleMessageResponder = new SimpleMessageResponder(userConfig.responses);
+
 
 let characterCanvas = document.getElementById('canvas1');
 if (!characterCanvas){
@@ -15,7 +20,9 @@ if (!characterCanvas){
     characterCanvas = newCanvas;
     document.body.appendChild(newCanvas);
 }
-const characterInstance = new Character(characterCanvas);
+const PNGTuber = require("./pngtuber/index.js");
+const characterInstance = new PNGTuber(characterCanvas, userConfig.pngTuber.sources);
+
 
 const runtimeData = {
     skips: 0,
@@ -24,6 +31,7 @@ const runtimeData = {
     lastRaidTime: new Date(0, 0),
 }
 
+
 const ttsInstance = new BrianTTS();
 ttsInstance.addAmplitudeSubscriptor(
     (_amplitude) => {
@@ -31,8 +39,7 @@ ttsInstance.addAmplitudeSubscriptor(
     }
 );
 
-StreamElementsEventsSubscription.subscribe((_data) => {
-    const streamEvent = StreamEventProcessor.ProcessStreamElementEvent(_data);
+AonyxEventListener.activeSubscription.subscribe((streamEvent) => {
 
     //ignore simulated events
     if (streamEvent.type.startsWith('event')) {
@@ -42,7 +49,7 @@ StreamElementsEventsSubscription.subscribe((_data) => {
     console.log(streamEvent);
 
     //Blacklist check
-    if (config.usernameBlacklist.includes(streamEvent.username)) {
+    if (userConfig.admin.blacklist.includes(streamEvent.username)) {
         console.log(`FrankTTS: Event from blacklisted username : ${streamEvent.username}`);
         return;
     }
@@ -92,8 +99,6 @@ StreamElementsEventsSubscription.subscribe((_data) => {
         }
     }
 
-
-
     if (streamEvent.type !== 'command' && runtimeData.isMuted) {
         console.log("FrankTTS: Event received but is currently muted");
         return;
@@ -125,7 +130,7 @@ StreamElementsEventsSubscription.subscribe((_data) => {
             _usernames.push(_data.username);
 
             const secondsSinceRaid = (new Date() - runtimeData.lastRaidTime) / 1000;
-            if (secondsSinceRaid > config.raidConfig.firstMessageTimeout) {
+            if (secondsSinceRaid > userConfig.behaviour.raid.ignoreFirstMessageForSeconds) {
                 const newMessageResponse = messages[Math.floor(Math.random() * messages.length)]
                     .replace(
                         '${username}',
@@ -150,12 +155,18 @@ StreamElementsEventsSubscription.subscribe((_data) => {
 
     reply = reply || greetFirstMessage(streamEvent, runtimeData.usernames);
 
-    //Testing
-    reply = reply || StreamEventInterpreter.responseToEvent(streamEvent);
+    reply = reply || simpleMessageResponder.respondToEvent(streamEvent);
 
-    const blacklistedEmotes = TTSFilter.emotesToBlackList(streamEvent.emotes);
-    const filteredText = TTSFilter.filterALL(reply, blacklistedEmotes);
+    if (streamEvent.type === 'sub' || streamEvent.type=== 'gift-bomb-sender' || streamEvent.type === 'gift-single'){
+        if (streamEvent.message){
+            reply = reply + '. ' + streamEvent.message;
+        }
+    }
+
+    const filteredText = ttsFilter.filterAll(reply, streamEvent.emotes);
+
     ttsInstance.enqueueRequest(filteredText);
 });
+
 
 ttsInstance.enqueueRequest("What's up star beans. My name is Frank.");

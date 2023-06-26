@@ -1,12 +1,10 @@
-const imageSources = require('../config.js').imageSources;
-
-class Character {
+class PNGTuber {
     width = 256;
     height = 256;
     size_multiplier = 1;
     frames_per_second = 24;
 
-    constructor(_canvas) {
+    constructor(_canvas, _srcs) {
         this.canvas = _canvas;
         this.ctx = this.canvas.getContext('2d');
 
@@ -19,12 +17,12 @@ class Character {
         this.canvas.style.height = `${this.height}px`;
 
         this.images = [];
-        this.image_count = imageSources.length;
+        this.image_count = _srcs.length;
 
         for (let i = 0; i < this.image_count; i++) {
             const newImage = new Image();
             newImage.onload = () => { this.animate() };
-            newImage.src = imageSources[i];
+            newImage.src = _srcs[i];
 
             this.images.push(newImage);
         }
@@ -62,4 +60,4 @@ class Character {
 
 }
 
-module.exports = Character
+module.exports = PNGTuber
