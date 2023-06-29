@@ -1,8 +1,10 @@
 // ES Modules
 import { ApiClient } from "vtubestudio";
-import { WebSocket } from "ws";
-import { icon } from "./config/icon.js";
-import fs from 'fs';
+//import { WebSocket } from "ws";
+import { icon } from "./icon.js";
+//import fs from 'fs';
+
+let auth = '';
 
 function lerp(a, b, alpha) {
     return a + alpha * (b - a);
@@ -16,14 +18,19 @@ function randomNormal() {
 
 function setAuthToken(authenticationToken) {
     // store the authentication token somewhere
-    fs.writeFileSync("./auth-token.txt", authenticationToken, {
-        encoding: "utf-8",
-    });
+    /*
+        fs.writeFileSync("./auth-token.txt", authenticationToken, {
+            encoding: "utf-8",
+        });
+    */
+    auth = authenticationToken;
 }
 
 function getAuthToken() {
     // retrieve the stored authentication token
-    return fs.readFileSync("./auth-token.txt", "utf-8");
+    /*    return fs.readFileSync("./auth-token.txt", "utf-8");
+    */
+    return auth;
 }
 
 const options = {
@@ -48,7 +55,7 @@ apiClient.on("connect", async () => {
 });
 
 
-class VTuber {
+export class VTuber {
     static ready = false;
     constructor() {
         this.mouth = 0;
@@ -77,4 +84,4 @@ class VTuber {
     }
 }
 
-module.exports = VTuber
+//module.exports = VTuber

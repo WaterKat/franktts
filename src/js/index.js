@@ -3,7 +3,12 @@ const BrianTTS = require("./text-to-speech/index.js");
 const stream_events = require('./stream-events/index.js');
 const TTSFilter = require('./text-processing/index.js');
 const SimpleMessageResponder = require('./responses/index.js');
+
 const PNGTuber = require("./pngtuber/index.js");
+
+import { VTuber } from './vtuber/vtuber.js';
+let vtuberInstance = undefined;
+
 const authData = require('./authentication/index.js');
 
 async function init() {
@@ -22,6 +27,9 @@ async function init() {
         document.body.appendChild(newCanvas);
     }
     const characterInstance = new PNGTuber(characterCanvas, userConfig.pngTuber.sources);
+    if (window.location.protocol === "file:") {
+        vtuberInstance = new VTuber();
+    }
 
     const runtimeData = {
         skips: 0,
@@ -34,6 +42,9 @@ async function init() {
     ttsInstance.addAmplitudeSubscriptor(
         (_amplitude) => {
             characterInstance.update_amplitude(_amplitude);
+            if (window.location.protocol === "file:") {
+                vtuberInstance.update_amplitude(_amplitude);
+            }
         }
     );
 
@@ -43,6 +54,7 @@ async function init() {
             return;
         }
 
+        console.log(JSON.stringify(streamEvent));
 
         //nickname
         if (!streamEvent.nickname) {
