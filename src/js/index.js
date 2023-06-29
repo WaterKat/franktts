@@ -8,7 +8,7 @@ const authData = require('./authentication/index.js');
 
 async function init() {
     const userConfig = await getData(authData.userID);
-    console.log(userConfig);
+    console.log('UserConfiguration: ', userConfig);
 
     const AonyxEventListener = stream_events.GetStreamEventListener(userConfig.admin.permissions);
     const ttsFilter = new TTSFilter(userConfig.filters.words, userConfig.filters.emotes.whitelist);
