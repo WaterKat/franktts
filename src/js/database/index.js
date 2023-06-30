@@ -249,6 +249,7 @@ const database = {
     },
 };
 
+/*
 function getCollection(_key) {
     return database[_key];
 }
@@ -256,3 +257,14 @@ function getCollection(_key) {
 module.exports = {
     getCollection: getCollection,
 };
+*/
+
+export async function getData(_key){
+    return database[_key];
+
+
+}
+
+export async function setData(_key, _data){
+    console.error("setData not implemented");
+}
