@@ -1,4 +1,6 @@
-import { setData, getData } from "./database/firestore/index.js";
+//import { setData, getData } from "./database/firestore/index.js";
+import { setData, getData } from "./database/index.js";
+
 const BrianTTS = require("./text-to-speech/index.js");
 const stream_events = require('./stream-events/index.js');
 const TTSFilter = require('./text-processing/index.js');
@@ -27,8 +29,11 @@ async function init() {
         document.body.appendChild(newCanvas);
     }
     const characterInstance = new PNGTuber(characterCanvas, userConfig.pngTuber.sources);
-    if (window.location.protocol === "file:") {
+
+    if (typeof VTuber !== 'undefined') {
         vtuberInstance = new VTuber();
+    } else {
+        console.log('Vtuber instance not created');
     }
 
     const runtimeData = {
@@ -42,11 +47,18 @@ async function init() {
     ttsInstance.addAmplitudeSubscriptor(
         (_amplitude) => {
             characterInstance.update_amplitude(_amplitude);
-            if (window.location.protocol === "file:") {
-                vtuberInstance.update_amplitude(_amplitude);
-            }
         }
     );
+
+    if (typeof VTuber !== 'undefined') {
+        ttsInstance.addAmplitudeSubscriptor(
+            (_amplitude) => {
+                vtuberInstance.update_amplitude(_amplitude);
+            }
+        );
+    } else {
+        console.log("VTuber instance not subscribed");
+    }
 
     AonyxEventListener.activeSubscription.subscribe((streamEvent) => {
         //ignore simulated events

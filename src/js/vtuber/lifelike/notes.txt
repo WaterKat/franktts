@@ -1,0 +1,471 @@
+
+    apiClient.injectParameterData(
+        {
+            parameterValues: [
+                {
+                    id: 'MouthOpen',
+                    value: this.mouth,
+                    weight: this.weight,
+                },
+            ]
+        },
+    );
+
+
+const AonyxTrackingData = {
+    "default": {
+        "FacePositionX": { "min": -15, "max": 15, "defaultValue": 0 },
+        "FacePositionY": { "min": -15, "max": 15, "defaultValue": 0 },
+        "FacePositionZ": { "min": -10, "max": 10, "defaultValue": 0 },
+        "FaceAngleX": { "min": -30, "max": 30, "defaultValue": 0 },
+        "FaceAngleY": { "min": -30, "max": 30, "defaultValue": 0 },
+        "FaceAngleZ": { "min": -90, "max": 90, "defaultValue": 0 },
+        "MouthSmile": { "min": 0, "max": 1, "defaultValue": 0 },
+        "MouthOpen": { "min": 0, "max": 1, "defaultValue": 0 },
+        "Brows": { "min": 0, "max": 1, "defaultValue": 0 },
+        "TongueOut": { "min": 0, "max": 1, "defaultValue": 0 },
+        "CheekPuff": { "min": 0, "max": 1, "defaultValue": 0 },
+        "FaceAngry": { "min": 0, "max": 1, "defaultValue": 0 },
+        "BrowLeftY": { "min": 0, "max": 1, "defaultValue": 0 },
+        "BrowRightY": { "min": 0, "max": 1, "defaultValue": 0 },
+        "EyeOpenLeft": { "min": 0, "max": 1, "defaultValue": 0 },
+        "EyeOpenRight": { "min": 0, "max": 1, "defaultValue": 0 },
+        "EyeLeftX": { "min": -1, "max": 1, "defaultValue": 0 },
+        "EyeLeftY": { "min": -1, "max": 1, "defaultValue": 0 },
+        "EyeRightX": { "min": -1, "max": 1, "defaultValue": 0 },
+        "EyeRightY": { "min": -1, "max": 1, "defaultValue": 0 },
+        "MousePositionX": { "min": -1, "max": 1, "defaultValue": 0 },
+        "MousePositionY": { "min": -1, "max": 1, "defaultValue": 0 },
+        "VoiceVolume": { "min": 0, "max": 1, "defaultValue": 0 },
+        "VoiceFrequency": { "min": 0, "max": 1, "defaultValue": 0 },
+        "VoiceVolumePlusMouthOpen": { "min": 0, "max": 1, "defaultValue": 0 },
+        "VoiceFrequencyPlusMouthSmile": { "min": 0, "max": 1, "defaultValue": 0 },
+        "MouthX": { "min": -1, "max": 1, "defaultValue": 0 },
+        "HandLeftFound": { "min": 0, "max": 1, "defaultValue": 0 },
+        "HandRightFound": { "min": 0, "max": 1, "defaultValue": 0 },
+        "BothHandsFound": { "min": 0, "max": 1, "defaultValue": 0 },
+        "HandDistance": { "min": 0, "max": 10, "defaultValue": 0 },
+        "HandLeftPositionX": { "min": 0, "max": 10, "defaultValue": 0 },
+        "HandLeftPositionY": { "min": -10, "max": 10, "defaultValue": 0 },
+        "HandLeftPositionZ": { "min": -10, "max": 10, "defaultValue": 0 },
+        "HandRightPositionX": { "min": 0, "max": 10, "defaultValue": 0 },
+        "HandRightPositionY": { "min": -10, "max": 10, "defaultValue": 0 },
+        "HandRightPositionZ": { "min": -10, "max": 10, "defaultValue": 0 },
+        "HandLeftAngleX": { "min": -180, "max": 180, "defaultValue": 0 },
+        "HandLeftAngleZ": { "min": -180, "max": 180, "defaultValue": 0 },
+        "HandRightAngleX": { "min": -180, "max": 180, "defaultValue": 0 },
+        "HandRightAngleZ": { "min": -180, "max": 180, "defaultValue": 0 },
+        "HandLeftOpen": { "min": 0, "max": 1, "defaultValue": 0 },
+        "HandRightOpen": { "min": 0, "max": 1, "defaultValue": 0 },
+        "HandLeftFinger_1_Thumb": { "min": 0, "max": 1, "defaultValue": 0 },
+        "HandLeftFinger_2_Index": { "min": 0, "max": 1, "defaultValue": 0 },
+        "HandLeftFinger_3_Middle": { "min": 0, "max": 1, "defaultValue": 0 },
+        "HandLeftFinger_4_Ring": { "min": 0, "max": 1, "defaultValue": 0 },
+        "HandLeftFinger_5_Pinky": { "min": 0, "max": 1, "defaultValue": 0 },
+        "HandRightFinger_5_Pinky": { "min": 0, "max": 1, "defaultValue": 0 }
+    },
+    "custom": {}
+}
+
+
+
+const example = {
+    modelLoaded: true,
+    modelName: 'frog',
+    modelID: '6757d8862e61485fb8c13d112cddd649',
+    defaultParameters: [
+        {
+            name: 'FacePositionX',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: -15,
+            max: 15,
+            defaultValue: 0
+        },
+        {
+            name: 'FacePositionY',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: -15,
+            max: 15,
+            defaultValue: 0
+        },
+        {
+            name: 'FacePositionZ',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: -10,
+            max: 10,
+            defaultValue: 0
+        },
+        {
+            name: 'FaceAngleX',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: -30,
+            max: 30,
+            defaultValue: 0
+        },
+        {
+            name: 'FaceAngleY',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: -30,
+            max: 30,
+            defaultValue: 0
+        },
+        {
+            name: 'FaceAngleZ',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: -90,
+            max: 90,
+            defaultValue: 0
+        },
+        {
+            name: 'MouthSmile',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'MouthOpen',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'Brows',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'TongueOut',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'CheekPuff',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'FaceAngry',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'BrowLeftY',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'BrowRightY',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'EyeOpenLeft',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'EyeOpenRight',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'EyeLeftX',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: -1,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'EyeLeftY',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: -1,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'EyeRightX',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: -1,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'EyeRightY',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: -1,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'MousePositionX',
+            addedBy: 'VTube Studio',
+            value: -1,
+            min: -1,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'MousePositionY',
+            addedBy: 'VTube Studio',
+            value: -0.17499995231628418,
+            min: -1,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'VoiceVolume',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'VoiceFrequency',
+            addedBy: 'VTube Studio',
+            value: 0.5,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'VoiceVolumePlusMouthOpen',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'VoiceFrequencyPlusMouthSmile',
+            addedBy: 'VTube Studio',
+            value: 0.5,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'MouthX',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: -1,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'HandLeftFound',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'HandRightFound',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'BothHandsFound',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'HandDistance',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 10,
+            defaultValue: 0
+        },
+        {
+            name: 'HandLeftPositionX',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 10,
+            defaultValue: 0
+        },
+        {
+            name: 'HandLeftPositionY',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: -10,
+            max: 10,
+            defaultValue: 0
+        },
+        {
+            name: 'HandLeftPositionZ',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: -10,
+            max: 10,
+            defaultValue: 0
+        },
+        {
+            name: 'HandRightPositionX',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 10,
+            defaultValue: 0
+        },
+        {
+            name: 'HandRightPositionY',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: -10,
+            max: 10,
+            defaultValue: 0
+        },
+        {
+            name: 'HandRightPositionZ',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: -10,
+            max: 10,
+            defaultValue: 0
+        },
+        {
+            name: 'HandLeftAngleX',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: -180,
+            max: 180,
+            defaultValue: 0
+        },
+        {
+            name: 'HandLeftAngleZ',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: -180,
+            max: 180,
+            defaultValue: 0
+        },
+        {
+            name: 'HandRightAngleX',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: -180,
+            max: 180,
+            defaultValue: 0
+        },
+        {
+            name: 'HandRightAngleZ',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: -180,
+            max: 180,
+            defaultValue: 0
+        },
+        {
+            name: 'HandLeftOpen',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'HandRightOpen',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'HandLeftFinger_1_Thumb',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'HandLeftFinger_2_Index',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'HandLeftFinger_3_Middle',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'HandLeftFinger_4_Ring',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'HandLeftFinger_5_Pinky',
+            addedBy: 'VTube Studio',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        },
+        {
+            name: 'HandRightFinger_5_Pinky',
+            addedBy: 'VTube Studio',
+            value: 0,
+            min: 0,
+            max: 1,
+            defaultValue: 0
+        }
+    ],
+    customParameters: []
