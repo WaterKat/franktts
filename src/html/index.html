@@ -14,6 +14,64 @@
     <div class="main" id="main">
         <canvas id="canvas1"></canvas>
     </div>
+
+    <div>
+        <input type="text" id="myInput">
+        <button onclick="myFunction()">Submit</button>
+    </div>
+
+    <script defer>
+        const tempResponse = {
+            "username": "waterkattv",
+            "nickname": "",
+            "permissions": ["chatter", "streamer"],
+            "type": "command",
+            "message": "!frank say hello 󠀀",
+            "emotes": [],
+            "follow": {},
+            "sub": {
+                "length": 0
+            },
+            "gift": {
+                "sender": "", "count": 1,
+                "isInitial": false,
+                "isGifted": false,
+                "isBulk": false
+            },
+            "raid": {
+                "count": 0
+            },
+            "cheer": {
+                "amount": 0
+            },
+            "chat": {},
+            "command": {
+                "identifier": "!",
+                "group": "frank",
+                "request": "say",
+                "args": " hello ",
+                "isValid": true
+            },
+            "emote": []
+        }
+
+        function myFunction() {
+            var inputText = document.getElementById("myInput").value;
+            const localObj = {
+                detail : {
+                    ...tempResponse,
+                    command: {
+                        ...tempResponse.command,
+                        args: `${inputText}`,
+                    },
+                    message: `!frank say ${inputText}`,
+                }
+            }
+            var customEvent = new CustomEvent('onAonyxEventReceived', localObj);
+
+            window.dispatchEvent(customEvent);
+        }
+    </script>
 </body>
 
 </html>

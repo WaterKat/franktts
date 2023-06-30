@@ -8,7 +8,7 @@ const database = {
                 subscriber: [],
             },
             nicknames: {
-                'fariaorion' :      ['onion', 'fohreo mec flurry', 'fari', 'fario', 'freddy', 'faria'],
+                'fariaorion' :      ['onion', 'fohreo mec flurry', 'fari', 'fario', 'freddy', 'faria', 'faris', 'froggia oh ribbit'],
                 'waterkattv' :      ['the cat', 'waterkat'],
                 'w01f_k' :          ['wolf', 'woof woof'],
                 'palerider_pr80' :  ['pale', 'pale rider', 'paw lay'],
@@ -249,6 +249,7 @@ const database = {
     },
 };
 
+/*
 function getCollection(_key) {
     return database[_key];
 }
@@ -256,3 +257,14 @@ function getCollection(_key) {
 module.exports = {
     getCollection: getCollection,
 };
+*/
+
+export async function getData(_key){
+    return database[_key];
+
+
+}
+
+export async function setData(_key, _data){
+    console.error("setData not implemented");
+}
